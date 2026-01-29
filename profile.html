@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Profile – Yasha Tech Solutions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-soft: #020617;
+      --card: #020617;
+      --border-subtle: #1e293b;
+      --primary: #38bdf8;
+      --primary-soft: rgba(56,189,248,0.18);
+      --accent: #22c55e;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --heading: #f9fafb;
+      --danger: #f97373;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background: radial-gradient(circle at top,rgba(15,23,42,0.9),#020617 60%);
+      color: var(--text-main);
+      min-height:100vh;
+    }
+    a{text-decoration:none;color:inherit;}
+
+    /* HEADER */
+    header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      backdrop-filter: blur(18px);
+      background: linear-gradient(90deg,rgba(15,23,42,0.96),rgba(15,23,42,0.92));
+      border-bottom:1px solid rgba(148,163,184,0.35);
+    }
+    .container{
+      width:94%;
+      max-width:1120px;
+      margin:0 auto;
+    }
+    .nav-bar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:10px 0;
+      gap:14px;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .logo-mark{
+      width:34px;height:34px;
+      border-radius:12px;
+      background: radial-gradient(circle at 30% 20%,#e0f2fe,#7dd3fc);
+      color:#0f172a;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      box-shadow:0 0 0 3px rgba(56,189,248,0.7);
+      font-size:1rem;
+    }
+    .logo-text{
+      font-size:0.95rem;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      color:#e5e7eb;
+    }
+    .top-right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:0.82rem;
+      color:var(--text-muted);
+    }
+    .pill{
+      padding:3px 9px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.7);
+      font-size:0.72rem;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+    }
+    .btn-ghost{
+      border-radius:999px;
+      padding:5px 12px;
+      border:1px solid rgba(148,163,184,0.9);
+      background:transparent;
+      color:var(--text-main);
+      font-size:0.8rem;
+      cursor:pointer;
+    }
+
+    /* PAGE TITLE / PROGRESS */
+    .page-head{
+      padding:14px 0 8px;
+    }
+    h1{
+      font-size:1.3rem;
+      color:var(--heading);
+      margin-bottom:4px;
+    }
+    .page-sub{
+      font-size:0.85rem;
+      color:var(--text-muted);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .progress{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      font-size:0.8rem;
+    }
+    .progress-bar{
+      width:120px;
+      height:4px;
+      border-radius:999px;
+      background:#0f172a;
+      overflow:hidden;
+    }
+    .progress-fill{
+      height:100%;
+      width:70%;
+      background:linear-gradient(90deg,var(--primary),var(--accent));
+    }
+
+    main{
+      padding:4px 0 26px;
+    }
+
+    /* FORM LAYOUT */
+    .form-shell{
+      display:grid;
+      grid-template-columns:minmax(0, 2.1fr) minmax(0, 1fr);
+      gap:18px;
+      align-items:flex-start;
+    }
+    @media(max-width:880px){
+      .form-shell{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .card{
+      background: radial-gradient(circle at top left,rgba(30,64,175,0.22),rgba(15,23,42,0.96));
+      border-radius:18px;
+      border:1px solid var(--border-subtle);
+      box-shadow:0 18px 40px rgba(0,0,0,0.8);
+      padding:14px 14px 16px;
+      margin-bottom:12px;
+    }
+    .sticky-side{
+      position:sticky;
+      top:74px;
+    }
+    .card-title{
+      font-size:0.98rem;
+      color:var(--heading);
+      margin-bottom:4px;
+    }
+    .card-note{
+      font-size:0.8rem;
+      color:var(--text-muted);
+      margin-bottom:10px;
+    }
+
+    .section{
+      margin-bottom:10px;
+      padding-bottom:10px;
+      border-bottom:1px dashed rgba(51,65,85,0.8);
+    }
+    .section:last-child{
+      border-bottom:none;
+      margin-bottom:2px;
+      padding-bottom:0;
+    }
+    .section-label{
+      font-size:0.82rem;
+      text-transform:uppercase;
+      letter-spacing:0.14em;
+      color:var(--text-muted);
+      margin-bottom:6px;
+    }
+
+    .field-group{
+      margin-bottom:8px;
+    }
+    label{
+      display:block;
+      font-size:0.8rem;
+      color:#cbd5f5;
+      margin-bottom:3px;
+    }
+    input,select,textarea{
+      width:100%;
+      padding:7px 9px;
+      border-radius:9px;
+      border:1px solid #1f2937;
+      background:rgba(15,23,42,0.9);
+      color:var(--text-main);
+      font-size:0.86rem;
+      font-family:inherit;
+    }
+    textarea{
+      resize:vertical;
+      min-height:70px;
+    }
+    input:focus,select:focus,textarea:focus{
+      outline:1px solid var(--primary);
+      border-color:var(--primary);
+      box-shadow:0 0 0 1px var(--primary-soft);
+    }
+    .help{
+      font-size:0.72rem;
+      color:var(--text-muted);
+      margin-top:2px;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+    }
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:10px;
+    }
+    @media(max-width:720px){
+      .grid-2,.grid-3{grid-template-columns:1fr;}
+    }
+
+    .badge-soft{
+      display:inline-block;
+      padding:3px 8px;
+      border-radius:999px;
+      background:rgba(15,118,110,0.35);
+      font-size:0.7rem;
+      color:#a5f3fc;
+    }
+
+    .actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+      margin-top:10px;
+    }
+    .btn-primary{
+      border-radius:999px;
+      padding:7px 16px;
+      border:none;
+      cursor:pointer;
+      font-size:0.86rem;
+      background:linear-gradient(135deg,var(--primary),var(--accent));
+      color:#020617;
+      font-weight:600;
+      letter-spacing:0.04em;
+    }
+    .btn-secondary{
+      border-radius:999px;
+      padding:7px 14px;
+      border:1px solid rgba(148,163,184,0.7);
+      background:transparent;
+      color:var(--text-main);
+      font-size:0.82rem;
+      cursor:pointer;
+    }
+    .status-line{
+      font-size:0.76rem;
+      color:var(--text-muted);
+      margin-top:4px;
+      text-align:right;
+    }
+
+    .summary-line{
+      font-size:0.8rem;
+      color:var(--text-muted);
+      margin-bottom:6px;
+    }
+    .summary-main{
+      font-size:0.86rem;
+      color:var(--heading);
+      margin-bottom:4px;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="container nav-bar">
+    <div class="logo">
+      <div class="logo-mark">Y</div>
+      <div class="logo-text">Yasha Tech Solutions · Student Profile</div>
+    </div>
+    <div class="top-right">
+      <span class="pill">STUDENT</span>
+      <span id="studentEmailLabel">Not logged in</span>
+      <button class="btn-ghost" onclick="goBack()">Back to Dashboard</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <div class="page-head">
+      <h1>Profile & Background</h1>
+      <div class="page-sub">
+        <span>Fill once here; your resume page will reuse these details automatically.</span>
+        <div class="progress">
+          <span>Profile completeness</span>
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-shell">
+      <!-- LEFT: form -->
+      <div>
+        <!-- 1. BASIC INFORMATION -->
+        <div class="card">
+          <div class="section-label">SECTION 1</div>
+          <div class="card-title">Basic Information</div>
+          <p class="card-note">Your core identity details used on certificates and resume.</p>
+
+          <div class="section">
+            <div class="grid-2">
+              <div class="field-group">
+                <label for="fullName">Full name (as per ID)</label>
+                <input id="fullName" type="text" placeholder="As per passport / official ID">
+              </div>
+              <div class="field-group">
+                <label for="dob">Date of birth</label>
+                <input id="dob" type="date">
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field-group">
+                <label for="email">Email</label>
+                <input id="email" type="email" placeholder="you@example.com">
+                <div class="help">We pre-fill this from your login when possible.</div>
+              </div>
+              <div class="field-group">
+                <label for="phone">Phone number</label>
+                <input id="phone" type="tel" placeholder="+91-XXXXXXXXXX">
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field-group">
+                <label for="resAddress">Residential address</label>
+                <textarea id="resAddress" placeholder="Current address with pin code"></textarea>
+              </div>
+              <div class="field-group">
+                <label for="permAddress">Permanent address</label>
+                <textarea id="permAddress" placeholder="Permanent address (if different)"></textarea>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field-group">
+                <label for="photoUrl">Photo URL (formal headshot)</label>
+                <input id="photoUrl" type="url" placeholder="Link to your photo">
+                <div class="help">Upload photo to Drive/Cloud, set to public, and paste the link.</div>
+              </div>
+              <div class="field-group">
+                <label for="languages">Languages &amp; proficiency</label>
+                <textarea id="languages" placeholder="e.g., English (Fluent), Kannada (Native), Hindi (Intermediate)"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. ACADEMIC BACKGROUND -->
+        <div class="card">
+          <div class="section-label">SECTION 2</div>
+          <div class="card-title">Academic Background</div>
+          <p class="card-note">Your current education status, grades and key subjects.</p>
+
+          <div class="section">
+            <div class="grid-2">
+              <div class="field-group">
+                <label for="institution">Current institution</label>
+                <input id="institution" type="text" placeholder="College / school name">
+              </div>
+              <div class="field-group">
+                <label for="institutionLocation">Institution location</label>
+                <input id="institutionLocation" type="text" placeholder="City, State">
+              </div>
+            </div>
+
+            <div class="grid-3">
+              <div class="field-group">
+                <label for="classGrade">Class / grade</label>
+                <input id="classGrade" type="text" placeholder="e.g., 2nd year BCA / 11th Std">
+              </div>
+              <div class="field-group">
+                <label for="section">Section / branch</label>
+                <input id="section" type="text" placeholder="e.g., CSE-AI / A">
+              </div>
+              <div class="field-group">
+                <label for="gpa">GPA / overall %</label>
+                <input id="gpa" type="text" placeholder="e.g., 8.2 CGPA / 78%">
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field-group">
+                <label for="keyGrades">Recent grades in key subjects</label>
+                <textarea id="keyGrades" placeholder="e.g., English: A, Math: A-, Science: B+"></textarea>
+              </div>
+              <div class="field-group">
+                <label for="testScores">Standardized / entrance exam scores</label>
+                <textarea id="testScores" placeholder="SAT / CET / COMEDK / AP / IB / others, if applicable"></textarea>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field-group">
+                <label for="awards">Academic awards &amp; honors</label>
+                <textarea id="awards" placeholder="Scholarships, rank holder, Olympiads, academic competitions, etc."></textarea>
+              </div>
+              <div class="field-group">
+                <label for="relevantSubjects">Relevant subjects / courses</label>
+                <textarea id="relevantSubjects" placeholder="Subjects related to your future goals (e.g., DS, Algorithms, Cloud, ML basics)"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. EXTRACURRICULAR ACTIVITIES -->
+        <div class="card">
+          <div class="section-label">SECTION 3</div>
+          <div class="card-title">Extracurricular Activities</div>
+          <p class="card-note">Everything you do beyond classroom learning.</p>
+
+          <div class="section">
+            <div class="field-group">
+              <label for="sports">Sports</label>
+              <textarea id="sports" placeholder="Teams, positions, achievements (e.g., College football defender, Zonal winners 2024)"></textarea>
+            </div>
+
+            <div class="grid-2">
+              <div class="field-group">
+                <label for="arts">Arts &amp; hobbies</label>
+                <textarea id="arts" placeholder="Music, theatre, dance, photography, painting, etc."></textarea>
+              </div>
+              <div class="field-group">
+                <label for="clubs">Clubs &amp; memberships</label>
+                <textarea id="clubs" placeholder="Debate club, student council, tech club, nature club, etc."></textarea>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="volunteering">Volunteering &amp; social work</label>
+              <textarea id="volunteering" placeholder="Community service, NGO work, tutoring, with approx. hours if possible."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. PROJECTS & TECHNICAL SKILLS -->
+        <div class="card">
+          <div class="section-label">SECTION 4</div>
+          <div class="card-title">Projects &amp; Technical Skills</div>
+          <p class="card-note">List your projects, internships and technical strengths (used directly on your resume).</p>
+
+          <div class="section">
+            <div class="grid-2">
+              <div class="field-group">
+                <label for="projects">Independent projects</label>
+                <textarea id="projects" placeholder="Web apps, research, blogs, podcasts, GitHub projects, etc."></textarea>
+              </div>
+              <div class="field-group">
+                <label for="internships">Internships / work experience</label>
+                <textarea id="internships" placeholder="Part-time jobs, internships, summer work with role and duration."></textarea>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field-group">
+                <label for="techSkills">Technical skills</label>
+                <textarea id="techSkills" placeholder="Languages, tools and platforms (e.g., Python, JS, SQL, AWS basics, Canva)"></textarea>
+              </div>
+              <div class="field-group">
+                <label for="certifications">Certifications &amp; online courses</label>
+                <textarea id="certifications" placeholder="Coursera / Google / edX / Udemy etc. with course names"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. PERSONAL PROFILE & ASPIRATIONS -->
+        <div class="card">
+          <div class="section-label">SECTION 5</div>
+          <div class="card-title">Personal Profile &amp; Aspirations</div>
+          <p class="card-note">This helps mentors understand who you are and where you want to go.</p>
+
+          <div class="section">
+            <div class="field-group">
+              <label for="personalStatement">Personal statement / short bio</label>
+              <textarea id="personalStatement" placeholder="Short paragraph summarizing who you are, strengths and passions."></textarea>
+            </div>
+
+            <div class="grid-2">
+              <div class="field-group">
+                <label for="careerGoals">Career goals / aspirations</label>
+                <textarea id="careerGoals" placeholder="What you want to achieve in 5–10 years."></textarea>
+              </div>
+              <div class="field-group">
+                <label for="strengths">Strengths</label>
+                <textarea id="strengths" placeholder="Technical, communication, leadership, creativity, etc."></textarea>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field-group">
+                <label for="weaknesses">Areas to improve</label>
+                <textarea id="weaknesses" placeholder="Skills / habits you want to improve and how you plan to work on them."></textarea>
+              </div>
+              <div class="field-group">
+                <label for="roleModel">Role model / vision</label>
+                <textarea id="roleModel" placeholder="Who inspires you and your vision for your life or community."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. ADDITIONAL INFORMATION -->
+        <div class="card">
+          <div class="section-label">SECTION 6</div>
+          <div class="card-title">Additional Information</div>
+          <p class="card-note">Used only for background and safety; not all of this appears on the resume.</p>
+
+          <div class="section">
+            <div class="grid-2">
+              <div class="field-group">
+                <label for="familyDetails">Family details</label>
+                <textarea id="familyDetails" placeholder="Parents/guardians: names, occupations, qualifications."></textarea>
+              </div>
+              <div class="field-group">
+                <label for="siblings">Siblings (optional)</label>
+                <textarea id="siblings" placeholder="Names, ages, studying / working."></textarea>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field-group">
+                <label for="emergency1">Emergency contact 1</label>
+                <textarea id="emergency1" placeholder="Name, relationship, phone number"></textarea>
+              </div>
+              <div class="field-group">
+                <label for="emergency2">Emergency contact 2</label>
+                <textarea id="emergency2" placeholder="Name, relationship, phone number"></textarea>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="medicalInfo">Medical information (optional)</label>
+              <textarea id="medicalInfo" placeholder="Allergies, health conditions, or special needs (if any)."></textarea>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn-secondary" type="button" onclick="loadProfile()">Load saved</button>
+            <button class="btn-primary" type="button" onclick="saveProfile()">Save profile</button>
+          </div>
+          <div class="status-line" id="statusLine"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: summary / preview -->
+      <aside class="sticky-side">
+        <div class="card">
+          <div class="card-title">Profile snapshot</div>
+          <p class="card-note">Quick view of how your details will look when used in your resume.</p>
+
+          <div class="summary-main" id="previewName">Name not set yet</div>
+          <div class="summary-line" id="previewLine1"></div>
+          <div class="summary-line" id="previewLine2"></div>
+          <div class="summary-line" id="previewLine3"></div>
+          <div style="margin-top:8px;font-size:0.75rem;color:var(--text-muted);">
+            When you go to the Resume page, we will automatically pull:
+            <span class="badge-soft">Name</span>
+            <span class="badge-soft">Contact</span>
+            <span class="badge-soft">Education</span>
+            <span class="badge-soft">Projects</span>
+            <span class="badge-soft">Skills</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<script>
+  const currentEmail = localStorage.getItem('yasha_current_user');
+  const emailLabel = document.getElementById('studentEmailLabel');
+
+  if (!currentEmail){
+    emailLabel.textContent = 'Not logged in';
+    alert('No student is logged in. Please login from the main portal first.');
+  } else {
+    emailLabel.textContent = currentEmail;
+    document.getElementById('email').value = currentEmail;
+  }
+
+  function profileKey(){
+    if (!currentEmail) return null;
+    return 'yasha_profile_' + currentEmail.toLowerCase();
+  }
+
+  function goBack(){
+    window.location.href = 'userpage.html';
+  }
+
+  function collectFormData(){
+    return {
+      fullName: document.getElementById('fullName').value.trim(),
+      dob: document.getElementById('dob').value,
+      email: document.getElementById('email').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      resAddress: document.getElementById('resAddress').value.trim(),
+      permAddress: document.getElementById('permAddress').value.trim(),
+      photoUrl: document.getElementById('photoUrl').value.trim(),
+      languages: document.getElementById('languages').value.trim(),
+
+      institution: document.getElementById('institution').value.trim(),
+      institutionLocation: document.getElementById('institutionLocation').value.trim(),
+      classGrade: document.getElementById('classGrade').value.trim(),
+      section: document.getElementById('section').value.trim(),
+      gpa: document.getElementById('gpa').value.trim(),
+      keyGrades: document.getElementById('keyGrades').value.trim(),
+      testScores: document.getElementById('testScores').value.trim(),
+      awards: document.getElementById('awards').value.trim(),
+      relevantSubjects: document.getElementById('relevantSubjects').value.trim(),
+
+      sports: document.getElementById('sports').value.trim(),
+      arts: document.getElementById('arts').value.trim(),
+      clubs: document.getElementById('clubs').value.trim(),
+      volunteering: document.getElementById('volunteering').value.trim(),
+
+      projects: document.getElementById('projects').value.trim(),
+      internships: document.getElementById('internships').value.trim(),
+      techSkills: document.getElementById('techSkills').value.trim(),
+      certifications: document.getElementById('certifications').value.trim(),
+
+      personalStatement: document.getElementById('personalStatement').value.trim(),
+      careerGoals: document.getElementById('careerGoals').value.trim(),
+      strengths: document.getElementById('strengths').value.trim(),
+      weaknesses: document.getElementById('weaknesses').value.trim(),
+      roleModel: document.getElementById('roleModel').value.trim(),
+
+      familyDetails: document.getElementById('familyDetails').value.trim(),
+      siblings: document.getElementById('siblings').value.trim(),
+      emergency1: document.getElementById('emergency1').value.trim(),
+      emergency2: document.getElementById('emergency2').value.trim(),
+      medicalInfo: document.getElementById('medicalInfo').value.trim(),
+      updatedAt: new Date().toISOString()
+    };
+  }
+
+  function fillForm(data){
+    if (!data) return;
+    document.getElementById('fullName').value = data.fullName || '';
+    document.getElementById('dob').value = data.dob || '';
+    document.getElementById('email').value = data.email || currentEmail || '';
+    document.getElementById('phone').value = data.phone || '';
+    document.getElementById('resAddress').value = data.resAddress || '';
+    document.getElementById('permAddress').value = data.permAddress || '';
+    document.getElementById('photoUrl').value = data.photoUrl || '';
+    document.getElementById('languages').value = data.languages || '';
+
+    document.getElementById('institution').value = data.institution || '';
+    document.getElementById('institutionLocation').value = data.institutionLocation || '';
+    document.getElementById('classGrade').value = data.classGrade || '';
+    document.getElementById('section').value = data.section || '';
+    document.getElementById('gpa').value = data.gpa || '';
+    document.getElementById('keyGrades').value = data.keyGrades || '';
+    document.getElementById('testScores').value = data.testScores || '';
+    document.getElementById('awards').value = data.awards || '';
+    document.getElementById('relevantSubjects').value = data.relevantSubjects || '';
+
+    document.getElementById('sports').value = data.sports || '';
+    document.getElementById('arts').value = data.arts || '';
+    document.getElementById('clubs').value = data.clubs || '';
+    document.getElementById('volunteering').value = data.volunteering || '';
+
+    document.getElementById('projects').value = data.projects || '';
+    document.getElementById('internships').value = data.internships || '';
+    document.getElementById('techSkills').value = data.techSkills || '';
+    document.getElementById('certifications').value = data.certifications || '';
+
+    document.getElementById('personalStatement').value = data.personalStatement || '';
+    document.getElementById('careerGoals').value = data.careerGoals || '';
+    document.getElementById('strengths').value = data.strengths || '';
+    document.getElementById('weaknesses').value = data.weaknesses || '';
+    document.getElementById('roleModel').value = data.roleModel || '';
+
+    document.getElementById('familyDetails').value = data.familyDetails || '';
+    document.getElementById('siblings').value = data.siblings || '';
+    document.getElementById('emergency1').value = data.emergency1 || '';
+    document.getElementById('emergency2').value = data.emergency2 || '';
+    document.getElementById('medicalInfo').value = data.medicalInfo || '';
+
+    updatePreview(data);
+  }
+
+  function saveProfile(){
+    const key = profileKey();
+    if (!key){
+      alert('No logged-in student. Cannot save profile.');
+      return;
+    }
+    const data = collectFormData();
+    localStorage.setItem(key, JSON.stringify(data));
+    updatePreview(data);
+    document.getElementById('statusLine').textContent =
+      'Profile saved at ' + new Date().toLocaleString();
+  }
+
+  function loadProfile(){
+    const key = profileKey();
+    if (!key){
+      alert('No logged-in student.');
+      return;
+    }
+    const raw = localStorage.getItem(key);
+    if (!raw){
+      alert('No saved profile found yet.');
+      return;
+    }
+    try{
+      const data = JSON.parse(raw);
+      fillForm(data);
+      document.getElementById('statusLine').textContent = 'Loaded saved profile.';
+    }catch(e){
+      alert('Could not load profile data.');
+    }
+  }
+
+  function updatePreview(data){
+    if (!data) data = collectFormData();
+    document.getElementById('previewName').textContent =
+      data.fullName || 'Name not set yet';
+
+    const line1Parts = [];
+    if (data.classGrade) line1Parts.push(data.classGrade);
+    if (data.section) line1Parts.push(data.section);
+    if (data.institution) line1Parts.push(data.institution);
+    document.getElementById('previewLine1').textContent = line1Parts.join(' · ');
+
+    const line2Parts = [];
+    if (data.institutionLocation) line2Parts.push(data.institutionLocation);
+    if (data.gpa) line2Parts.push('GPA ' + data.gpa);
+    document.getElementById('previewLine2').textContent = line2Parts.join(' · ');
+
+    const line3Parts = [];
+    if (data.techSkills) line3Parts.push('Skills: ' + data.techSkills);
+    else if (data.projects) line3Parts.push('Projects added.');
+    document.getElementById('previewLine3').textContent = line3Parts.join(' · ');
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const key = profileKey();
+    if (key && localStorage.getItem(key)){
+      loadProfile();
+    } else {
+      updatePreview();
+    }
+  });
+</script>
+</body>
+</html>

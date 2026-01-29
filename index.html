@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yasha Tech Solutions - Internship Portal</title>
+
+  <meta name="description"
+        content="Yasha Tech Solutions offers industry-oriented internships in Cloud Computing, DevOps, Full-Stack Development, Data Science and AI & ML for BCA, MCA and Engineering students.">
+
+  <style>
+    :root {
+      --primary-purple: #7b2cbf;
+      --primary-blue: #1d4fa8;
+      --accent: #00b894;
+      --light-bg: #f6f4fb;
+      --dark-bg: #140b2e;
+      --text-main: #222222;
+      --text-light: #f9f9ff;
+      --card-radius: 12px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: white;
+      line-height: 1.6;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+    .container { width: 90%; max-width: 1120px; margin: 0 auto; }
+
+    /* HEADER */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: linear-gradient(90deg, var(--primary-blue), var(--primary-purple));
+      color: var(--text-light);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    }
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      gap: 20px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .logo-mark {
+      width: 36px; height: 36px; border-radius: 9px;
+      background: white; color: var(--primary-purple);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; box-shadow: 0 0 0 3px rgba(255,255,255,0.35);
+    }
+    .logo-text { font-size: 1.05rem; }
+    .main-nav { display: flex; gap: 18px; font-size: 0.95rem; }
+    .main-nav a { position: relative; padding-bottom: 4px; }
+    .main-nav a::after {
+      content: ""; position: absolute; left: 0; bottom: 0;
+      width: 0; height: 2px; background: var(--accent);
+      transition: width 0.25s ease;
+    }
+    .main-nav a:hover::after { width: 100%; }
+
+    .right-nav {
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .admin-link{
+      font-size:0.82rem;
+      text-decoration:underline;
+      cursor:pointer;
+    }
+
+    .auth-buttons { display: flex; gap: 10px; }
+    .btn {
+      border-radius: 999px; padding: 7px 16px; font-size: 0.9rem;
+      cursor: pointer; border: 1px solid transparent;
+      transition: all 0.2s ease; white-space: nowrap;
+    }
+    .btn.solid { background: var(--accent); color: white; border-color: var(--accent); }
+    .btn.solid:hover { background: #019870; }
+    .btn.outline { background: transparent; color: var(--text-light); border-color: rgba(255,255,255,0.75); }
+    .btn.outline:hover { background: rgba(255,255,255,0.15); }
+
+    /* HERO */
+    .hero-section {
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.4), transparent 55%),
+        linear-gradient(140deg, #fefbff, #f2f4ff);
+      padding: 56px 0 60px;
+    }
+    .hero-content {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 32px;
+      align-items: center;
+    }
+    .hero-text h1 {
+      font-size: clamp(1.9rem, 3vw, 2.4rem);
+      margin-bottom: 12px;
+      color: var(--dark-bg);
+    }
+    .hero-text p { max-width: 540px; margin-bottom: 10px; }
+    .hero-sub { font-size: 0.92rem; color: #555; }
+    .hero-actions { margin: 18px 0; display: flex; gap: 12px; flex-wrap: wrap; }
+    .msme-note { font-size: 0.85rem; color: #555; margin-top: 4px; }
+    .hero-card {
+      background: white; border-radius: var(--card-radius);
+      padding: 10px; box-shadow: var(--shadow-soft);
+      border: 1px solid #e6defa;
+    }
+    .hero-card img { border-radius: 10px; }
+
+    /* SECTIONS */
+    section { padding: 56px 0; }
+    .section-light { background: var(--light-bg); }
+    .section-dark {
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,0.08), transparent 55%),
+        linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+      color: var(--text-light);
+    }
+    h2 { font-size: 1.6rem; margin-bottom: 16px; color: inherit; }
+    .section-intro { max-width: 620px; margin-bottom: 22px; font-size: 0.98rem; }
+    .two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 28px;
+      align-items: center;
+    }
+    .about-card {
+      background: white; border-radius: var(--card-radius);
+      padding: 10px; box-shadow: var(--shadow-soft);
+    }
+    .about-card img { border-radius: 10px; }
+
+    /* INTERNSHIP */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 18px;
+      margin-top: 16px;
+    }
+    .course-card {
+      background: rgba(255,255,255,0.06);
+      border-radius: var(--card-radius);
+      padding: 16px 14px;
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.2);
+      backdrop-filter: blur(6px);
+    }
+    .course-card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .course-card p { font-size: 0.9rem; color: #ece6ff; }
+    .eligibility-box {
+      margin-top: 28px; padding: 16px 18px; border-radius: var(--card-radius);
+      background: rgba(10, 6, 32, 0.85);
+      border: 1px solid rgba(255,255,255,0.15);
+      font-size: 0.92rem;
+    }
+    .eligibility-box ul { padding-left: 18px; margin-top: 6px; }
+    .eligibility-box li { margin-bottom: 4px; }
+
+    /* CONTACT */
+    .contact-list { list-style: none; margin-top: 10px; }
+    .contact-list li { margin-bottom: 6px; font-size: 0.95rem; }
+    .contact-list a { color: var(--primary-blue); font-weight: 600; }
+    .contact-form {
+      background: white; border-radius: var(--card-radius);
+      padding: 18px 18px 20px; box-shadow: var(--shadow-soft);
+    }
+    .contact-form h3 { margin-bottom: 10px; font-size: 1.05rem; }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%; padding: 8px 10px; margin-bottom: 10px;
+      border-radius: 6px; border: 1px solid #d1cbe8;
+      font-size: 0.9rem; font-family: inherit; resize: vertical;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      outline: 2px solid var(--primary-purple); border-color: transparent;
+    }
+    .contact-form button { width: 100%; border: none; }
+
+    /* FOOTER */
+    .site-footer {
+      background: #0b0718; color: rgba(238, 233, 255, 0.9);
+      padding: 18px 0 22px; font-size: 0.85rem;
+    }
+    .footer-content {
+      display: flex; justify-content: space-between;
+      gap: 10px; flex-wrap: wrap;
+    }
+
+    /* MODALS */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+      display: none; align-items: center; justify-content: center;
+      z-index: 2000;
+    }
+    .modal {
+      background: white; width: 95%; max-width: 420px;
+      border-radius: 14px; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      overflow: hidden; animation: slideIn 0.25s ease-out;
+    }
+    .modal-header {
+      background: linear-gradient(120deg, var(--primary-blue), var(--primary-purple));
+      color: white; padding: 14px 18px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-header h3 { font-size: 1.05rem; }
+    .modal-close { cursor: pointer; font-size: 1.3rem; line-height: 1; }
+    .modal-body { padding: 16px 18px 18px; font-size: 0.9rem; }
+    .modal-body label { display: block; margin-bottom: 3px; font-weight: 600; }
+    .modal-body input,
+    .modal-body select {
+      width: 100%; padding: 8px 10px; margin-bottom: 10px;
+      border-radius: 6px; border: 1px solid #ccc4e8;
+      font-size: 0.9rem; font-family: inherit;
+    }
+    .modal-body input:focus,
+    .modal-body select:focus {
+      outline: 2px solid var(--primary-purple); border-color: transparent;
+    }
+    .modal-body .btn { width: 100%; margin-top: 8px; border: none; }
+    .modal-note { margin-top: 4px; font-size: 0.78rem; color: #555; text-align: center; }
+
+    .role-row{
+      display:flex;
+      gap:8px;
+      margin-bottom:10px;
+      font-size:0.86rem;
+      align-items:center;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(18px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 850px) {
+      .hero-content, .two-column { grid-template-columns: 1fr; }
+      .hero-card { order: -1; }
+      .main-nav { display: none; }
+    }
+    @media (max-width: 540px) {
+      .nav-bar { flex-wrap: wrap; justify-content: space-between; }
+      .auth-buttons { margin-left: auto; }
+      .hero-section { padding-top: 42px; }
+      section { padding: 44px 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container nav-bar">
+      <div class="logo">
+        <span class="logo-mark">Y</span>
+        <span class="logo-text">Yasha Tech Solutions</span>
+      </div>
+
+      <nav class="main-nav">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#internship">Internship</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="right-nav">
+        <a href="admin.html" class="admin-link">Admin Login</a>
+        <div class="auth-buttons">
+          <button class="btn outline" id="openSignup">Sign Up</button>
+          <button class="btn solid" id="openSignin">Sign In</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO / HOME -->
+  <main id="home">
+    <section class="hero-section">
+      <div class="container hero-content">
+        <div class="hero-text">
+          <h1>Internship Portal for Future Tech Professionals</h1>
+          <p>
+            Build impactful projects with industry‑oriented internships for BCA, MCA
+            and Engineering students in CSE, IT, Data Science and AI &amp; ML.
+          </p>
+          <p class="hero-sub">
+            Cloud Computing • DevOps • Full‑Stack Development • Data Science • Machine Learning • Computer Hardware &amp; Basics
+          </p>
+          <div class="hero-actions">
+            <button class="btn solid" id="heroSignup">Get Started</button>
+            <a href="#internship" class="btn outline">View Internship Programs</a>
+          </div>
+          <p class="msme-note">
+            MSME Registered • Internships structured to align with VTU and Karnataka university internship guidelines • Internship Certificate on Successful Completion
+          </p>
+        </div>
+
+        <div class="hero-card">
+          <img src="PAMPLATES.png" alt="Yasha Tech Solutions Internship Program Pamphlet">
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section-light">
+      <div class="container two-column">
+        <div>
+          <h2>About Yasha Tech Solutions</h2>
+          <p>
+            Yasha Tech Solutions is an MSME‑registered training and internship company
+            providing practical IT skills through real‑time projects and mentoring by working professionals.
+          </p>
+          <p>
+            Students gain hands‑on experience, professional networking, skill development
+            and resume‑ready project exposure that helps them stand out in high‑tech and MNC hiring.
+          </p>
+        </div>
+        <div class="about-card">
+          <img src="CERTIFICATE.png" alt="Sample Certificate of Internship from Yasha Tech Solutions">
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERNSHIP -->
+    <section id="internship" class="section-dark">
+      <div class="container">
+        <h2>Internship Programs</h2>
+        <p class="section-intro">
+          Choose your domain and learn from scratch with project‑based guidance, dedicated mentoring
+          and completion certificates.
+        </p>
+
+        <div class="card-grid">
+          <article class="course-card">
+            <h3>Cloud Computing</h3>
+            <p>Understand cloud concepts, services and deployment models with guided lab practice.</p>
+          </article>
+          <article class="course-card">
+            <h3>DevOps</h3>
+            <p>Learn CI/CD, containerization and automation tools used in modern software delivery.</p>
+          </article>
+          <article class="course-card">
+            <h3>Full‑Stack Development</h3>
+            <p>Build responsive web apps from frontend UI to backend APIs and databases.</p>
+          </article>
+          <article class="course-card">
+            <h3>Data Science</h3>
+            <p>Work on data cleaning, analysis and visualization with real‑world datasets.</p>
+          </article>
+          <article class="course-card">
+            <h3>Machine Learning</h3>
+            <p>Implement ML models for prediction, classification and recommendation problems.</p>
+          </article>
+          <article class="course-card">
+            <h3>Computer Hardware &amp; Basics</h3>
+            <p>Understand computer components, operating systems and essential IT fundamentals.</p>
+          </article>
+        </div>
+
+        <div class="eligibility-box">
+          <h3>Eligibility</h3>
+          <ul>
+            <li>BCA, MCA and Engineering students (CSE / IT / Data Science / AI &amp; ML)</li>
+            <li>Basic programming knowledge recommended</li>
+            <li>Duration, fees and schedules will be shared in detail after registration and login to the student dashboard</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section-light">
+      <div class="container two-column">
+        <div>
+          <h2>Contact &amp; Registration</h2>
+          <p>
+            Have questions about the internship or need help with registration? Reach out anytime.
+          </p>
+          <ul class="contact-list">
+            <li><strong>WhatsApp:</strong> <a href="https://wa.me/919480401503" target="_blank">+91‑9480401503</a></li>
+            <li><strong>Email:</strong> <a href="mailto:yashatechsolutions1503@gmail.com">yashatechsolutions1503@gmail.com</a></li>
+          </ul>
+        </div>
+        <div>
+          <form class="contact-form" onsubmit="event.preventDefault(); alert('Thank you! We will contact you soon.');">
+            <h3>Send a Message</h3>
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea rows="4" placeholder="Your Message" required></textarea>
+            <button type="submit" class="btn solid">Submit</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <p>© 2026 Yasha Tech Solutions. All rights reserved.</p>
+      <p>Student dashboard, teacher dashboard and payment integration will be available after login.</p>
+    </div>
+  </footer>
+
+  <!-- SIGN UP MODAL -->
+  <div class="modal-backdrop" id="signupModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Create Account</h3>
+        <span class="modal-close" data-close="signupModal">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="role-row">
+          <span>Account type:</span>
+          <label><input type="radio" name="su-role" value="student" checked> Student</label>
+          <label><input type="radio" name="su-role" value="teacher"> Teacher</label>
+        </div>
+
+        <label for="su-name">Full Name</label>
+        <input id="su-name" type="text" placeholder="Your Name" required>
+
+        <label for="su-email">Email</label>
+        <input id="su-email" type="email" placeholder="you@example.com" required>
+
+        <label for="su-phone">Phone</label>
+        <input id="su-phone" type="tel" placeholder="+91-9480401503" required>
+
+        <!-- visible only for students -->
+        <div id="studentCourseWrapper">
+          <label for="su-course">Course (for students)</label>
+          <select id="su-course">
+            <option value="">Select</option>
+            <option>BCA</option>
+            <option>MCA</option>
+            <option>BE / BTech - CSE</option>
+            <option>BE / BTech - IT</option>
+            <option>BE / BTech - Data Science</option>
+            <option>BE / BTech - AI &amp; ML</option>
+          </select>
+        </div>
+
+        <label for="su-password">Password</label>
+        <input id="su-password" type="password" placeholder="Create a password" required>
+        <button class="btn solid" onclick="handleSignup()">Sign Up</button>
+        <p class="modal-note">
+          After admin approval, students can access the student dashboard and teachers the teacher dashboard.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGN IN MODAL -->
+  <div class="modal-backdrop" id="signinModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Login</h3>
+        <span class="modal-close" data-close="signinModal">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="role-row">
+          <span>Login as:</span>
+          <label><input type="radio" name="si-role" value="student" checked> Student</label>
+          <label><input type="radio" name="si-role" value="teacher"> Teacher</label>
+        </div>
+
+        <label for="si-email">Email</label>
+        <input id="si-email" type="email" placeholder="you@example.com" required>
+
+        <label for="si-password">Password</label>
+        <input id="si-password" type="password" placeholder="Enter your password" required>
+        <button class="btn solid" onclick="handleSignin()">Sign In</button>
+        <p class="modal-note">
+          Student login goes to <code>userpage.html</code>, teacher login goes to <code>teacher.html</code> once approved by admin.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- MODAL OPEN/CLOSE ----------
+    const signupModal = document.getElementById('signupModal');
+    const signinModal = document.getElementById('signinModal');
+
+    document.getElementById('openSignup').addEventListener('click', () => {
+      signupModal.style.display = 'flex';
+    });
+    document.getElementById('heroSignup').addEventListener('click', () => {
+      signupModal.style.display = 'flex';
+    });
+    document.getElementById('openSignin').addEventListener('click', () => {
+      signinModal.style.display = 'flex';
+    });
+    document.querySelectorAll('.modal-close').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-close');
+        document.getElementById(id).style.display = 'none';
+      });
+    });
+    window.addEventListener('click', (e) => {
+      if (e.target === signupModal) signupModal.style.display = 'none';
+      if (e.target === signinModal) signinModal.style.display = 'none';
+    });
+
+    // toggle student course field when signup role changes
+    const studentCourseWrapper = document.getElementById('studentCourseWrapper');
+    document.querySelectorAll('input[name="su-role"]').forEach(r => {
+      r.addEventListener('change', () => {
+        studentCourseWrapper.style.display = (getSelectedSignupRole() === 'student') ? 'block' : 'none';
+      });
+    });
+
+    function getUsers() {
+      const raw = localStorage.getItem('yasha_users');
+      return raw ? JSON.parse(raw) : [];
+    }
+
+    function saveUsers(users) {
+      localStorage.setItem('yasha_users', JSON.stringify(users));
+    }
+
+    function getSelectedSignupRole() {
+      const r = document.querySelector('input[name="su-role"]:checked');
+      return r ? r.value : 'student';
+    }
+    function getSelectedSigninRole() {
+      const r = document.querySelector('input[name="si-role"]:checked');
+      return r ? r.value : 'student';
+    }
+
+    // ---------- SIGN UP ----------
+    function handleSignup() {
+      const role = getSelectedSignupRole();
+      const name = document.getElementById('su-name').value.trim();
+      const email = document.getElementById('su-email').value.trim();
+      const phone = document.getElementById('su-phone').value.trim();
+      const courseType = document.getElementById('su-course').value;
+      const password = document.getElementById('su-password').value;
+
+      if (!name || !email || !phone || !password) {
+        alert('Please fill all required fields.');
+        return;
+      }
+      if (role === 'student' && !courseType) {
+        alert('Please select your course.');
+        return;
+      }
+
+      const users = getUsers();
+      const exists = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+      if (exists) {
+        alert('This email is already registered.');
+        return;
+      }
+
+      const newUser = {
+        name,
+        email,
+        phone,
+        password,
+        role,                      // "student" or "teacher"
+        courseType: role === 'student' ? courseType : null,
+        status: 'pending',         // needs admin approval
+        createdAt: new Date().toISOString()
+      };
+
+      users.push(newUser);
+      saveUsers(users);
+
+      alert('Signup successful! Your account is pending admin approval. You will be able to login after admin accepts your request.');
+      signupModal.style.display = 'none';
+    }
+
+    // ---------- SIGN IN ----------
+    function handleSignin() {
+      const role = getSelectedSigninRole();
+      const email = document.getElementById('si-email').value.trim();
+      const password = document.getElementById('si-password').value.trim();
+
+      if (!email || !password) {
+        alert('Enter email and password.');
+        return;
+      }
+
+      const users = getUsers();
+      const user = users.find(
+        u =>
+          u.email.toLowerCase() === email.toLowerCase() &&
+          u.password === password &&
+          (u.role || 'student') === role
+      );
+
+      if (!user) {
+        alert('Invalid credentials for ' + role + ' account.');
+        return;
+      }
+
+      if (user.status === 'pending') {
+        alert('Your account is waiting for admin approval. Please try again later.');
+        return;
+      }
+      if (user.status === 'rejected') {
+        alert('Your registration request was rejected. Please contact admin at yashatechsolutions153@gmail.com.');
+        return;
+      }
+
+      if (role === 'student') {
+        localStorage.setItem('yasha_current_user', email);
+        alert('Student login successful!');
+        signinModal.style.display = 'none';
+        window.location.href = 'userpage.html';
+      } else {
+        localStorage.setItem('yasha_teacher_user', email);
+        alert('Teacher login successful!');
+        signinModal.style.display = 'none';
+        window.location.href = 'teacher.html';
+      }
+    }
+
+    // ---------- Admin default credentials (stored in localStorage) ----------
+    (function initAdminCredentials(){
+      // admin user/pass can be edited from admin.html by owner of gmail yashatechsolutions153@gmail.com
+      if (!localStorage.getItem('yasha_admin_user')) {
+        localStorage.setItem('yasha_admin_user', 'admin');
+      }
+      if (!localStorage.getItem('yasha_admin_pass')) {
+        localStorage.setItem('yasha_admin_pass', 'yasha123');
+      }
+    })();
+  </script>
+</body>
+</html>

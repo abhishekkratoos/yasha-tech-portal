@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Course – Yasha Tech Solutions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body{
+      font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:#020617;
+      color:#e5e7eb;
+      min-height:100vh;
+    }
+    header{
+      padding:10px 6%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      backdrop-filter:blur(16px);
+      background:linear-gradient(90deg,rgba(0,0,0,0.7),rgba(0,0,0,0.4));
+      border-bottom:1px solid rgba(148,163,184,0.6);
+      color:#f9fafb;
+    }
+    .brand{display:flex;align-items:center;gap:10px;}
+    .brand-mark{
+      width:36px;height:36px;border-radius:12px;
+      background:radial-gradient(circle at 30% 20%,#ffffff,#a5f3fc);
+      color:#0369a1;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;box-shadow:0 0 0 3px rgba(56,189,248,0.7);
+    }
+    .brand-text{font-size:0.96rem;letter-spacing:0.08em;text-transform:uppercase;}
+    .top-right{display:flex;align-items:center;gap:10px;font-size:0.86rem;}
+    .pill{
+      padding:3px 10px;border-radius:999px;
+      border:1px solid rgba(148,163,184,0.7);
+      font-size:0.76rem;text-transform:uppercase;letter-spacing:0.12em;
+    }
+    .btn-out{
+      border-radius:999px;padding:4px 12px;
+      border:1px solid rgba(248,250,252,0.9);
+      background:transparent;color:#f9fafb;font-size:0.8rem;cursor:pointer;
+    }
+
+    main{padding:18px 4% 28px;}
+
+    .course-shell{
+      max-width:1200px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:260px 1.6fr 1.1fr;
+      gap:16px;
+    }
+    @media(max-width:1100px){
+      .course-shell{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .card{
+      background:rgba(15,23,42,0.95);
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,0.4);
+      padding:14px 14px 16px;
+    }
+    .card-title{font-size:0.95rem;margin-bottom:6px;}
+    .card-sub{font-size:0.78rem;color:#9ca3af;margin-bottom:10px;}
+
+    /* course tabs (from selected courses) */
+    .course-tabs{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-bottom:10px;
+    }
+    .course-tab{
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.7);
+      font-size:0.78rem;
+      cursor:pointer;
+      color:#e5e7eb;
+      background:transparent;
+    }
+    .course-tab.active{
+      background:linear-gradient(135deg,#38bdf8,#22c55e);
+      border-color:transparent;
+      color:#020617;
+      font-weight:600;
+    }
+
+    /* video list */
+    .video-list{
+      max-height:70vh;
+      overflow-y:auto;
+      padding-right:4px;
+    }
+    .video-item{
+      display:flex;
+      gap:8px;
+      padding:8px 6px;
+      border-radius:10px;
+      cursor:pointer;
+      margin-bottom:6px;
+      align-items:center;
+    }
+    .video-item:hover{
+      background:rgba(30,64,175,0.35);
+    }
+    .video-item.active{
+      background:rgba(59,130,246,0.45);
+      border:1px solid rgba(191,219,254,0.7);
+    }
+    .thumb{
+      width:70px;height:44px;border-radius:8px;
+      background:#0f172a;
+      display:flex;align-items:center;justify-content:center;
+      font-size:0.7rem;
+      color:#e5e7eb;
+      position:relative;
+    }
+    .thumb::after{
+      content:"▶";
+      position:absolute;
+      font-size:0.85rem;
+      color:#e5e7eb;
+    }
+    .video-meta{flex:1;}
+    .video-title{font-size:0.84rem;margin-bottom:2px;}
+    .video-extra{font-size:0.75rem;color:#9ca3af;}
+
+    /* resizable player */
+    .player-outer{
+      border-radius:14px;
+      border:1px solid rgba(148,163,184,0.5);
+      background:#020617;
+      padding:6px;
+      resize:both;
+      overflow:hidden;
+      min-width:260px;
+      min-height:220px;
+      max-width:100%;
+    }
+    .player-wrapper{
+      width:100%;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+    }
+    video{
+      width:100%;
+      height:100%;
+      max-height:380px;
+      background:#000;
+      border-radius:10px;
+    }
+    .player-meta{
+      padding:8px 2px 2px;
+    }
+    .player-meta h2{
+      font-size:1rem;
+      margin-bottom:4px;
+    }
+    .player-meta p{
+      font-size:0.8rem;
+      color:#9ca3af;
+    }
+    .current-time{
+      font-size:0.76rem;
+      color:#9ca3af;
+      margin-top:2px;
+    }
+
+    /* Q&A */
+    .qa-box{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .qa-input{
+      background:#020617;
+      border-radius:12px;
+      border:1px solid rgba(51,65,85,0.9);
+      padding:8px 9px;
+      color:#e5e7eb;
+      font-size:0.86rem;
+      min-height:72px;
+      resize:vertical;
+    }
+    .qa-input:focus{
+      outline:1px solid #38bdf8;
+      border-color:#38bdf8;
+    }
+    .qa-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+      align-items:center;
+    }
+    .btn-primary{
+      border-radius:999px;
+      padding:6px 14px;
+      font-size:0.82rem;
+      cursor:pointer;
+      border:none;
+      background:linear-gradient(135deg,#22c55e,#a3e635);
+      color:#020617;
+      font-weight:600;
+      letter-spacing:0.04em;
+    }
+    .btn-ghost{
+      border-radius:999px;
+      padding:5px 12px;
+      font-size:0.8rem;
+      cursor:pointer;
+      border:1px solid rgba(148,163,184,0.7);
+      background:transparent;
+      color:#e5e7eb;
+    }
+    .answer-area{
+      background:#020617;
+      border-radius:12px;
+      border:1px solid rgba(51,65,85,0.9);
+      padding:9px 10px;
+      font-size:0.85rem;
+      min-height:80px;
+      white-space:pre-wrap;
+    }
+    .answer-placeholder{
+      color:#6b7280;
+    }
+    .tiny{
+      font-size:0.7rem;
+      color:#9ca3af;
+    }
+    .jump-link{
+      color:#38bdf8;
+      cursor:pointer;
+      text-decoration:underline;
+      font-size:0.8rem;
+      margin-top:4px;
+      display:inline-block;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="brand-mark">Y</div>
+    <div class="brand-text">Yasha Tech · Course</div>
+  </div>
+  <div class="top-right">
+    <span class="pill">COURSE</span>
+    <span id="welcomeName">Welcome, Student</span>
+    <button class="btn-out" onclick="goDashboard()">Back</button>
+  </div>
+</header>
+
+<main>
+  <div class="course-shell">
+    <!-- LEFT: course tabs + video list -->
+    <section class="card">
+      <div class="card-title">Your course videos</div>
+      <div class="card-sub">Choose a course tab first, then pick a lesson to watch.</div>
+
+      <div id="courseTabs" class="course-tabs"></div>
+
+      <div id="videoList" class="video-list"></div>
+    </section>
+
+    <!-- CENTER: resizable player -->
+    <section class="card">
+      <div class="player-outer">
+        <div class="player-wrapper">
+          <video id="player" controls></video>
+        </div>
+      </div>
+      <div class="player-meta">
+        <h2 id="playerTitle">Select a course and lesson</h2>
+        <p id="playerDesc"></p>
+        <div class="current-time" id="currentTime">Time: 00:00</div>
+      </div>
+    </section>
+
+    <!-- RIGHT: AI Q&A -->
+    <section class="card">
+      <div class="card-title">Ask a question</div>
+      <div class="card-sub">
+        Ask doubts about the current lesson. Answer shows the time from the video where it is explained.
+      </div>
+
+      <div class="qa-box">
+        <textarea id="questionBox" class="qa-input" placeholder="Type your question here..."></textarea>
+        <div class="qa-actions">
+          <span class="tiny" id="qaStatus"></span>
+          <button class="btn-ghost" type="button" onclick="clearQA()">Clear</button>
+          <button class="btn-primary" type="button" onclick="askQuestion()">Ask</button>
+        </div>
+        <div id="answerBox" class="answer-area">
+          <span class="answer-placeholder">Answer will appear here based on the current video and time.</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+  // ======== user + course data from dashboard ========
+  function getUsers() {
+    const raw = localStorage.getItem('yasha_users');
+    return raw ? JSON.parse(raw) : [];
+  }
+  function getCurrentEmail() {
+    return localStorage.getItem('yasha_current_user');
+  }
+  function goDashboard(){
+    window.location.href = 'userpage.html';
+  }
+
+  const email = getCurrentEmail();
+  const users = getUsers();
+  const me = email ? users.find(u => u.email.toLowerCase() === email.toLowerCase()) : null;
+
+  if (!me) {
+    alert('No logged-in user found. Redirecting.');
+    window.location.href = 'index.html';
+  }
+  document.getElementById('welcomeName').textContent = 'Welcome, ' + (me.name || 'Student');
+
+  // courses selected by user on dashboard
+  const userCourses = (me.courses || []).map(c => c.name);
+
+  // ======== master video list grouped by course ========
+  const allCourseVideos = {
+    'Cloud Computing': [
+      {
+        id: 'cloud1',
+        title: 'Intro to Cloud & AWS Global Infrastructure',
+        description: 'Regions, AZs and the shared responsibility model.',
+        duration: '15:20',
+        src: 'videos/cloud-intro.mp4'
+      },
+      {
+        id: 'cloud2',
+        title: 'EC2 Basics & Launching Your First Instance',
+        description: 'Instance types, AMIs, security groups and key pairs.',
+        duration: '22:10',
+        src: 'videos/cloud-ec2.mp4'
+      }
+    ],
+    'DevOps': [
+      {
+        id: 'devops1',
+        title: 'What is DevOps? CI/CD Overview',
+        description: 'Culture, tooling and a high-level pipeline.',
+        duration: '18:05',
+        src: 'videos/devops-intro.mp4'
+      },
+      {
+        id: 'devops2',
+        title: 'Git, GitHub & Branching Strategy',
+        description: 'Using Git effectively in DevOps projects.',
+        duration: '20:40',
+        src: 'videos/devops-git.mp4'
+      }
+    ],
+    'Full‑Stack Development': [
+      {
+        id: 'fs1',
+        title: 'Full‑Stack Architecture Overview',
+        description: 'Frontend, backend, DB, APIs and deployment.',
+        duration: '19:12',
+        src: 'videos/fs-architecture.mp4'
+      },
+      {
+        id: 'fs2',
+        title: 'Building REST APIs with Node & Express',
+        description: 'Routing, controllers and connecting to MySQL.',
+        duration: '24:50',
+        src: 'videos/fs-node-express.mp4'
+      }
+    ],
+    'Data Science': [
+      {
+        id: 'ds1',
+        title: 'Intro to Data Science Workflow',
+        description: 'Data cleaning, EDA, modelling and evaluation.',
+        duration: '17:30',
+        src: 'videos/ds-workflow.mp4'
+      }
+    ],
+    'Machine Learning': [
+      {
+        id: 'ml1',
+        title: 'Supervised vs Unsupervised Learning',
+        description: 'Core concepts with simple examples.',
+        duration: '21:00',
+        src: 'videos/ml-intro.mp4'
+      }
+    ],
+    'Computer Hardware & Basics': [
+      {
+        id: 'hw1',
+        title: 'Inside the Computer: CPU, RAM, Storage',
+        description: 'Core components and how they work together.',
+        duration: '16:45',
+        src: 'videos/hw-components.mp4'
+      }
+    ]
+  };
+
+  let currentCourse = null;
+  let currentVideo = null;
+
+  const courseTabsEl = document.getElementById('courseTabs');
+  const videoListEl = document.getElementById('videoList');
+  const player = document.getElementById('player');
+  const playerTitle = document.getElementById('playerTitle');
+  const playerDesc = document.getElementById('playerDesc');
+  const currentTimeLabel = document.getElementById('currentTime');
+
+  // build course tabs only for courses the user has
+  function renderCourseTabs(){
+    courseTabsEl.innerHTML = '';
+    if (!userCourses.length){
+      courseTabsEl.innerHTML = '<span style="font-size:0.8rem;color:#9ca3af;">No courses selected yet. Go back to dashboard & add courses first.</span>';
+      return;
+    }
+    userCourses.forEach((name, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'course-tab';
+      btn.textContent = name;
+      btn.addEventListener('click', () => selectCourse(name));
+      courseTabsEl.appendChild(btn);
+      if (idx === 0) currentCourse = name;
+    });
+    if (currentCourse) {
+      setActiveCourseTab(currentCourse);
+      renderVideoList();
+    }
+  }
+
+  function setActiveCourseTab(name){
+    document.querySelectorAll('.course-tab').forEach(tab => {
+      tab.classList.toggle('active', tab.textContent === name);
+    });
+  }
+
+  function selectCourse(name){
+    currentCourse = name;
+    setActiveCourseTab(name);
+    renderVideoList();
+    clearPlayer();
+  }
+
+  function renderVideoList(){
+    videoListEl.innerHTML = '';
+    if (!currentCourse || !allCourseVideos[currentCourse] || allCourseVideos[currentCourse].length === 0){
+      videoListEl.innerHTML = '<div style="font-size:0.8rem;color:#9ca3af;">No videos configured yet for this course.</div>';
+      return;
+    }
+    allCourseVideos[currentCourse].forEach(v => {
+      const item = document.createElement('div');
+      item.className = 'video-item';
+      item.dataset.id = v.id;
+      item.innerHTML = `
+        <div class="thumb"></div>
+        <div class="video-meta">
+          <div class="video-title">${v.title}</div>
+          <div class="video-extra">${v.duration}</div>
+        </div>
+      `;
+      item.addEventListener('click', () => selectVideo(v.id));
+      videoListEl.appendChild(item);
+    });
+  }
+
+  function clearPlayer(){
+    player.src = '';
+    playerTitle.textContent = 'Select a lesson';
+    playerDesc.textContent = '';
+    currentTimeLabel.textContent = 'Time: 00:00';
+    currentVideo = null;
+  }
+
+  function selectVideo(id){
+    const list = allCourseVideos[currentCourse] || [];
+    const v = list.find(x => x.id === id);
+    if (!v) return;
+    currentVideo = v;
+
+    document.querySelectorAll('.video-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.id === id);
+    });
+
+    player.src = v.src;
+    player.play().catch(()=>{});
+    playerTitle.textContent = v.title;
+    playerDesc.textContent = v.description;
+    updateCurrentTime();
+    clearQA(true);
+  }
+
+  function formatTime(sec){
+    sec = Math.floor(sec || 0);
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return (m < 10 ? '0'+m : m) + ':' + (s < 10 ? '0'+s : s);
+  }
+
+  function updateCurrentTime(){
+    currentTimeLabel.textContent = 'Time: ' + formatTime(player.currentTime);
+  }
+
+  player.addEventListener('timeupdate', updateCurrentTime);
+
+  // ======== Q&A logic (front-end demo) ========
+  function clearQA(keepQuestion){
+    document.getElementById('qaStatus').textContent = '';
+    const answerBox = document.getElementById('answerBox');
+    if (!keepQuestion) document.getElementById('questionBox').value = '';
+    answerBox.innerHTML = '<span class="answer-placeholder">Answer will appear here based on the current video and time.</span>';
+  }
+
+  async function askQuestion(){
+    const question = document.getElementById('questionBox').value.trim();
+    const status = document.getElementById('qaStatus');
+    const answerBox = document.getElementById('answerBox');
+
+    if (!currentVideo){
+      alert('Select a course and video first.');
+      return;
+    }
+    if (!question){
+      alert('Type your question.');
+      return;
+    }
+
+    const t = player.currentTime || 0;
+    const timeText = formatTime(t);
+
+    status.textContent = 'Generating answer...';
+
+    // Here later you call your backend API with currentVideo.id, question, timeText
+    await new Promise(res => setTimeout(res, 900)); // fake delay
+
+    const answerText =
+`(Demo answer)
+Question: "${question}"
+
+This explanation is based on the lesson:
+"${currentVideo.title}"
+
+Around time ${timeText}, the instructor discusses a concept that relates to your question.
+Re‑watch that section and pause where needed.`;
+
+    answerBox.innerHTML = `
+      ${answerText.replace(/\n/g,'<br>')}
+      <br>
+      <span class="jump-link" onclick="jumpToTime(${Math.max(0, t - 5)})">
+        ▶ Jump to ${timeText} in the video
+      </span>
+    `;
+
+    status.textContent = 'Answer generated using current video time (demo).';
+  }
+
+  function jumpToTime(sec){
+    player.currentTime = sec;
+    player.play().catch(()=>{});
+  }
+
+  // init
+  renderCourseTabs();
+</script>
+</body>
+</html>

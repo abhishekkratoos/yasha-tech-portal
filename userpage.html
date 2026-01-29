@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Dashboard - Yasha Tech Solutions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --primary: #00e5ff;
+      --primary-soft: rgba(0,229,255,0.25);
+      --accent: #00ff99;
+      --bg-dark: #020617;
+      --card-bg: rgba(0,0,0,0.78);
+      --text-main: #f9fafb;
+      --muted: #9ca3af;
+      --card-radius: 18px;
+      --shadow: 0 16px 40px rgba(0,0,0,0.8);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      min-height: 100vh;
+      background: #000;
+      position: relative;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url("dashboard-bg.jpg") center/cover no-repeat;
+      z-index: -2;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(0,0,0,0.4), rgba(0,0,0,0.9));
+      z-index: -1;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    header {
+      padding: 10px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(18px);
+      background: linear-gradient(90deg, rgba(0,0,0,0.7), rgba(0,0,0,0.4));
+      border-bottom: 1px solid rgba(148,163,184,0.6);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-mark {
+      width: 36px; height: 36px; border-radius: 12px;
+      background: radial-gradient(circle at 30% 20%, #ffffff, #a5f3fc);
+      color: #0369a1;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; box-shadow: 0 0 0 3px rgba(56,189,248,0.7);
+    }
+    .brand-text { font-size: 0.98rem; letter-spacing: 0.08em; text-transform: uppercase; }
+    .top-right {
+      display: flex; align-items: center; gap: 14px;
+      font-size: 0.86rem;
+    }
+    .badge {
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      color: var(--muted);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .btn-out {
+      border-radius: 999px;
+      padding: 4px 12px;
+      border: 1px solid rgba(248,250,252,0.9);
+      background: rgba(0,0,0,0.6);
+      color: #f9fafb;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    main {
+      padding: 22px 6% 30px;
+    }
+    .hello {
+      margin-bottom: 18px;
+      font-size: 1rem;
+    }
+    .hello span {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 22px;
+      align-items: flex-start;
+    }
+
+    .glass-panel {
+      background: linear-gradient(135deg, rgba(15,23,42,0.9), rgba(15,23,42,0.85));
+      border-radius: 20px;
+      padding: 18px 18px 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(148,163,184,0.4);
+    }
+
+    .panel-title {
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+    .panel-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .tile {
+      position: relative;
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.25), transparent 55%),
+                  rgba(15,23,42,0.96);
+      border-radius: 18px;
+      padding: 14px 14px 16px;
+      border: 1px solid rgba(148,163,184,0.35);
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+    .tile:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px rgba(15,23,42,0.9);
+      border-color: var(--primary);
+    }
+    .tile-title {
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+    .tile-sub {
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+    .tile-tag {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 0.7rem;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .placeholder-box {
+      border-radius: 12px;
+      border: 1px dashed rgba(148,163,184,0.7);
+      padding: 10px 12px;
+      font-size: 0.84rem;
+      color: var(--muted);
+      background: rgba(15,23,42,0.85);
+    }
+    .course-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      gap: 8px;
+      font-size: 0.84rem;
+    }
+    .course-name { font-weight: 500; }
+    .progress {
+      height: 6px;
+      background: rgba(15,23,42,1);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #22c55e, #a3e635);
+    }
+    textarea, select, input {
+      width: 100%;
+      padding: 7px 9px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(51,65,85,0.9);
+      background: rgba(15,23,42,0.95);
+      color: var(--text-main);
+      font-size: 0.84rem;
+      font-family: inherit;
+    }
+    textarea { resize: vertical; }
+    textarea:focus, select:focus, input:focus {
+      outline: 1px solid var(--primary);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary-soft);
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 7px 16px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border: none;
+      background: linear-gradient(135deg, #06b6d4, #22c55e);
+      color: #020617;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-top: 4px;
+    }
+
+    .content-panel {
+      display: none;
+      margin-top: 12px;
+    }
+    .content-panel.active { display: block; }
+
+    .quote-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .quote-text {
+      font-size: 0.98rem;
+      line-height: 1.5;
+    }
+    .quote-author {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .course-img-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .course-img-row img {
+      width: 80px;
+      border-radius: 10px;
+      border: 1px solid rgba(148,163,184,0.5);
+      background:#020617;
+    }
+
+    @media (max-width: 860px) {
+      main { padding: 18px 4% 26px; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-mark">Y</div>
+      <div class="brand-text">Yasha Tech Solutions · Student Dashboard</div>
+    </div>
+    <div class="top-right">
+      <span class="badge">LOCAL PREVIEW</span>
+      <span id="welcomeName">Welcome, Student</span>
+      <button class="btn-out" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="hello">
+      Hello <span id="helloName">Student</span>, choose a tile from your dashboard.
+    </div>
+
+    <div class="dashboard-grid">
+      <!-- LEFT: DASHBOARD TILES -->
+      <div class="glass-panel">
+        <div class="panel-title">Dashboard</div>
+        <p class="panel-note">Quick access to all sections of your internship workspace.</p>
+
+        <div class="tiles-grid">
+          <div class="tile" onclick="openProfilePage()">
+            <div class="tile-title">Profile</div>
+            <div class="tile-sub">View & edit your personal details.</div>
+            <div class="tile-tag">Open</div>
+          </div>
+
+          <div class="tile" onclick="openResumePage()">
+            <div class="tile-title">Resume</div>
+            <div class="tile-sub">Build ATS‑friendly resume content.</div>
+            <div class="tile-tag">Create</div>
+          </div>
+
+          <!-- NEW: go to separate course page -->
+<div class="tile" onclick="openCoursePage()">
+  <div class="tile-title">Courses</div>
+  <div class="tile-sub">Track Cloud, DevOps, Full‑Stack, etc.</div>
+  <div class="tile-tag">Progress</div>
+</div>
+
+          <div class="tile" onclick="openPanel('testPanel')">
+            <div class="tile-title">Tests</div>
+            <div class="tile-sub">Weekly quiz and final assessment (coming soon).</div>
+            <div class="tile-tag">Tests</div>
+          </div>
+
+          <div class="tile" onclick="openPanel('certificatePanel')">
+            <div class="tile-title">Certificates</div>
+            <div class="tile-sub">Completion and merit certificates.</div>
+            <div class="tile-tag">View</div>
+          </div>
+
+          <div class="tile" onclick="openPanel('projectPanel')">
+            <div class="tile-title">Project Updates</div>
+            <div class="tile-sub">Maintain a log of tasks completed.</div>
+            <div class="tile-tag">Log</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: TECH FEED + PANELS -->
+      <div class="glass-panel">
+        <div class="panel-title">Today on Your Tech Feed</div>
+        <p class="panel-note">Quick inspiration, company highlights and what you can do next.</p>
+
+        <div style="margin-bottom:16px;">
+          <div class="quote-label">Quote of the day</div>
+          <div id="quoteText" class="quote-text"></div>
+          <div id="quoteAuthor" class="quote-author"></div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div class="quote-label">From Yasha Tech Solutions</div>
+          <div style="display:flex; flex-direction:column; gap:6px; font-size:0.85rem;">
+            <div>
+              <strong>Industry‑led mentoring ·</strong>
+              Learn from working developers who handle production systems, not just classroom examples.
+            </div>
+            <div>
+              <strong>Real project exposure ·</strong>
+              Work on full‑stack, cloud and DevOps projects that are used in actual companies.
+            </div>
+            <div>
+              <strong>Build your proof ·</strong>
+              Turn your tasks into resume points, GitHub repos and VTU internship report content.
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="panel-title" style="margin-bottom:4px;">What to do now?</div>
+          <div style="font-size:0.8rem; color:var(--muted); margin-bottom:8px;">
+            Simple steps to keep your internship on track.
+          </div>
+
+          <div style="display:grid; gap:8px; font-size:0.85rem; margin-bottom:14px;">
+            <div class="placeholder-box">
+              1. Open <strong>Profile</strong> from the left dashboard and complete your basic details (college, semester, skills).
+            </div>
+            <div class="placeholder-box">
+              2. Use <strong>Resume</strong> to prepare strong points for your CV (headline, summary, projects).
+            </div>
+            <div class="placeholder-box">
+              3. Go to <strong>Courses</strong> and add your domain, then update completion percentage after each module.
+            </div>
+            <div class="placeholder-box">
+              4. Use <strong>Project Updates</strong> to write a short log whenever you finish a task.
+            </div>
+          </div>
+        </div>
+
+        <!-- PANELS -->
+        <div id="coursePanel" class="content-panel">
+          <div class="panel-title">Courses</div>
+          <p class="panel-note">Add domains and update completion percentage for your internship modules.</p>
+
+          <div class="course-img-row">
+            <img src="course-cloud.png" alt="Cloud Computing">
+            <img src="course-devops.png" alt="DevOps">
+            <img src="course-fullstack.png" alt="Full-Stack Development">
+            <img src="course-frontend.png" alt="Frontend Development">
+            <img src="course-backend.png" alt="Backend Development">
+            <img src="course-hardware.png" alt="Computer Hardware & Basics">
+          </div>
+
+          <label style="font-size:0.78rem; color:var(--muted); margin-bottom:3px;">Select Course</label>
+          <select id="courseSelect">
+            <option value="">-- Select --</option>
+            <option>Cloud Computing</option>
+            <option>DevOps</option>
+            <option>Full‑Stack Development</option>
+            <option>Data Science</option>
+            <option>Machine Learning</option>
+            <option>Computer Hardware & Basics</option>
+          </select>
+          <button class="btn" type="button" onclick="addCourse()">Add Course</button>
+
+          <div id="courseList" style="margin-top:12px;"></div>
+        </div>
+
+        <div id="testPanel" class="content-panel">
+          <div class="panel-title">Tests</div>
+          <p class="panel-note">This is a placeholder for weekly tests and course completion exams.</p>
+          <div class="placeholder-box">
+            Test module will appear here (MCQs, coding questions, scores, and history).  
+            For now, your mentor will share test links manually.
+          </div>
+        </div>
+
+        <div id="certificatePanel" class="content-panel">
+          <div class="panel-title">Certificates</div>
+          <p class="panel-note">Once you complete the internship, certificate details will be shown here.</p>
+          <div class="placeholder-box">
+            Certificate preview and download links will be added later.  
+            Keep your profile, course progress and tests up to date to qualify.
+          </div>
+        </div>
+
+        <div id="projectPanel" class="content-panel">
+          <div class="panel-title">Project Updates</div>
+          <p class="panel-note">Maintain a simple daily/weekly log of what you worked on.</p>
+
+          <label style="font-size:0.78rem; color:var(--muted); margin-bottom:3px;">Latest Update</label>
+          <textarea id="proj-latest" rows="3" placeholder="e.g., Implemented login API, fixed bug in dashboard, deployed to test server."></textarea>
+          <button class="btn" type="button" onclick="addProjectUpdate()">Add Update</button>
+
+          <div id="proj-list" style="margin-top:10px;" class="placeholder-box">(No project updates yet.)</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function getUsers() {
+      const raw = localStorage.getItem('yasha_users');
+      return raw ? JSON.parse(raw) : [];
+    }
+    function saveUsers(users) {
+      localStorage.setItem('yasha_users', JSON.stringify(users));
+    }
+    function getCurrentEmail() {
+      return localStorage.getItem('yasha_current_user');
+    }
+
+    const currentEmail = getCurrentEmail();
+    if (!currentEmail) {
+      alert('No logged-in user found. Redirecting to home page.');
+      window.location.href = 'index.html';
+    }
+
+    let users = getUsers();
+    let me = users.find(u => u.email.toLowerCase() === currentEmail.toLowerCase());
+    if (!me) {
+      alert('User not found in local storage. Redirecting to home.');
+      window.location.href = 'index.html';
+    }
+
+    me.profile = me.profile || {};
+    me.courses = me.courses || [];
+    me.resume = me.resume || {};
+    me.projectLog = me.projectLog || [];
+
+    document.getElementById('welcomeName').textContent = 'Welcome, ' + (me.name || 'Student');
+    document.getElementById('helloName').textContent = me.name || 'Student';
+
+    renderProjectLog();
+    renderCourses();
+
+    const quotes = [
+      { text: "Simplicity is the soul of efficiency.", author: "Austin Freeman" },
+      { text: "First, solve the problem. Then, write the code.", author: "John Johnson" },
+      { text: "Code is like humor. When you have to explain it, it’s bad.", author: "Cory House" },
+      { text: "Great engineers are great learners first.", author: "Unknown" },
+      { text: "The best way to predict the future is to create it.", author: "Peter Drucker" },
+      { text: "Success is the sum of small efforts repeated day after day.", author: "Robert Collier" }
+    ];
+    const todayIndex = new Date().getDate() % quotes.length;
+    document.getElementById('quoteText').textContent = '“' + quotes[todayIndex].text + '”';
+    document.getElementById('quoteAuthor').textContent = '— ' + quotes[todayIndex].author;
+
+    function openPanel(id) {
+      document.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active'));
+      const panel = document.getElementById(id);
+      if (panel) panel.classList.add('active');
+    }
+
+    function openProfilePage() {
+      window.location.href = 'profile.html';
+    }
+
+    function openResumePage() {
+      window.location.href = 'resume.html';
+    }
+
+  function openCoursePage() {
+    window.location.href = 'course.html';   // make sure the file name/path is correct
+  }
+    function addCourse() {
+      const select = document.getElementById('courseSelect');
+      const name = select ? select.value : "";
+      if (!name) { alert('Select a course first.'); return; }
+
+      if (me.courses.find(c => c.name === name)) {
+        alert('Course already added.');
+        return;
+      }
+      me.courses.push({ name, progress: 0 });
+      users = users.map(u => (u.email === me.email ? me : u));
+      saveUsers(users);
+      renderCourses();
+      select.value = '';
+    }
+
+    function updateCourseProgress(index, value) {
+      me.courses[index].progress = Number(value);
+      users = users.map(u => (u.email === me.email ? me : u));
+      saveUsers(users);
+      renderCourses();
+    }
+
+    function renderCourses() {
+      const container = document.getElementById('courseList');
+      if (!container) return;
+      container.innerHTML = '';
+      if (!me.courses.length) {
+        container.innerHTML = '<div class="placeholder-box">No courses added yet. Add a domain and update progress as you complete modules.</div>';
+        return;
+      }
+
+      me.courses.forEach((c, i) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'course-item';
+        wrap.innerHTML = `
+          <div style="flex:1;">
+            <div class="course-name">${c.name}</div>
+            <div class="progress">
+              <div class="progress-bar" style="width:${c.progress}%;"></div>
+            </div>
+          </div>
+          <div>
+            <input type="number" min="0" max="100" value="${c.progress}" style="width:70px;"
+                   onchange="updateCourseProgress(${i}, this.value)">%
+          </div>
+        `;
+        container.appendChild(wrap);
+      });
+    }
+
+    function addProjectUpdate() {
+      const textarea = document.getElementById('proj-latest');
+      const text = textarea ? textarea.value.trim() : "";
+      if (!text) { alert('Write something before adding.'); return; }
+      const entry = { text, time: new Date().toLocaleString() };
+      me.projectLog.unshift(entry);
+      textarea.value = '';
+      users = users.map(u => (u.email === me.email ? me : u));
+      saveUsers(users);
+      renderProjectLog();
+    }
+
+    function renderProjectLog() {
+      const box = document.getElementById('proj-list');
+      if (!box) return;
+      if (!me.projectLog || me.projectLog.length === 0) {
+        box.textContent = '(No project updates yet.)';
+        return;
+      }
+      box.innerHTML = '';
+      me.projectLog.forEach((e, idx) => {
+        const div = document.createElement('div');
+        div.style.marginBottom = '6px';
+        div.style.fontSize = '0.84rem';
+        div.innerHTML = `<strong>${idx + 1}.</strong> ${e.text} <span style="color:#64748b;font-size:0.75rem;">(${e.time})</span>`;
+        box.appendChild(div);
+      });
+    }
+
+    function logout() {
+      localStorage.removeItem('yasha_current_user');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

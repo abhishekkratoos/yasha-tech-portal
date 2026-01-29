@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard – Yasha Tech Solutions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:#020617;
+      color:#e5e7eb;
+      min-height:100vh;
+    }
+    header{
+      padding:10px 6%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      backdrop-filter:blur(16px);
+      background:linear-gradient(90deg,rgba(0,0,0,0.7),rgba(0,0,0,0.4));
+      border-bottom:1px solid rgba(148,163,184,0.6);
+    }
+    .brand{display:flex;align-items:center;gap:10px;}
+    .brand-mark{
+      width:36px;height:36px;border-radius:12px;
+      background:radial-gradient(circle at 30% 20%,#ffffff,#a5f3fc);
+      color:#0369a1;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;box-shadow:0 0 0 3px rgba(56,189,248,0.7);
+    }
+    .brand-text{font-size:0.98rem;letter-spacing:0.08em;text-transform:uppercase;}
+    .badge{
+      padding:3px 9px;border-radius:999px;
+      border:1px solid rgba(148,163,184,0.7);
+      font-size:0.74rem;text-transform:uppercase;letter-spacing:0.12em;
+    }
+    .btn-out{
+      border-radius:999px;padding:4px 12px;
+      border:1px solid rgba(248,250,252,0.9);
+      background:transparent;color:#f9fafb;font-size:0.8rem;cursor:pointer;
+    }
+
+    main{padding:20px 6% 30px;}
+    .card{
+      max-width:1000px;
+      margin:0 auto;
+      background:rgba(15,23,42,0.95);
+      border-radius:18px;
+      padding:16px 16px 18px;
+      border:1px solid rgba(148,163,184,0.4);
+      box-shadow:0 16px 40px rgba(0,0,0,0.7);
+    }
+    .card-title{font-size:1.05rem;margin-bottom:6px;}
+    .card-note{font-size:0.82rem;color:#9ca3af;margin-bottom:10px;}
+
+    .login-row{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
+    input{
+      width:100%;padding:7px 9px;margin-bottom:6px;
+      border-radius:8px;border:1px solid rgba(51,65,85,0.9);
+      background:#020617;color:#e5e7eb;font-size:0.86rem;
+    }
+    input:focus{
+      outline:1px solid #38bdf8;border-color:#38bdf8;
+    }
+    .btn{
+      border-radius:999px;padding:7px 16px;font-size:0.82rem;
+      cursor:pointer;border:none;
+      background:linear-gradient(135deg,#06b6d4,#22c55e);
+      color:#020617;font-weight:600;letter-spacing:0.04em;
+    }
+
+    .tabs{
+      display:flex;gap:8px;margin-bottom:10px;margin-top:6px;flex-wrap:wrap;
+    }
+    .tab{
+      padding:4px 10px;border-radius:999px;
+      border:1px solid rgba(148,163,184,0.7);
+      font-size:0.8rem;cursor:pointer;color:#e5e7eb;
+    }
+    .tab.active{
+      background:linear-gradient(135deg,#38bdf8,#22c55e);
+      border-color:transparent;color:#020617;font-weight:600;
+    }
+    .list{
+      margin-top:4px;
+      max-height:320px;
+      overflow-y:auto;
+    }
+    .row{
+      border-radius:10px;
+      border:1px solid rgba(51,65,85,0.9);
+      padding:8px 9px;
+      margin-bottom:6px;
+      background:rgba(15,23,42,0.95);
+      font-size:0.84rem;
+    }
+    .row-header{
+      display:flex;justify-content:space-between;align-items:flex-start;gap:6px;
+    }
+    .name{font-weight:600;}
+    .badge-role{
+      font-size:0.72rem;
+      padding:2px 8px;border-radius:999px;
+      background:rgba(37,99,235,0.35);
+    }
+    .muted{font-size:0.8rem;color:#9ca3af;}
+    .btn-small{
+      border-radius:999px;padding:4px 9px;font-size:0.76rem;
+      cursor:pointer;border:none;margin-left:4px;
+    }
+    .btn-approve{background:#22c55e;color:#020617;}
+    .btn-reject{background:#ef4444;color:#020617;}
+    .status-tag{
+      font-size:0.78rem;color:#a5b4fc;margin-top:2px;
+    }
+
+    .change-pass{
+      margin-top:14px;
+      padding-top:10px;
+      border-top:1px solid rgba(51,65,85,0.9);
+      font-size:0.82rem;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="brand-mark">Y</div>
+    <div class="brand-text">Yasha Tech · Admin</div>
+  </div>
+  <div>
+    <span class="badge">ADMIN PANEL</span>
+    <button class="btn-out" onclick="logout()">Exit</button>
+  </div>
+</header>
+
+<main>
+  <!-- LOGIN CARD -->
+  <div class="card" id="loginCard">
+    <div class="card-title">Admin Login</div>
+    <p class="card-note">
+      Only the portal owner should approve or reject user signup requests.
+      If you forget the password, contact <strong>yashatechsolutions153@gmail.com</strong> to reset it.
+    </p>
+    <div class="login-row">
+      <input id="adminUser" type="text" placeholder="Admin username">
+      <input id="adminPass" type="password" placeholder="Admin password">
+      <button class="btn" onclick="adminLogin()">Login</button>
+      <p class="card-note">
+        Default credentials (only on this browser) are <code>admin / yasha123</code>. Please change them after first login.
+      </p>
+    </div>
+  </div>
+
+  <!-- MAIN ADMIN CARD -->
+  <div class="card" id="adminCard" style="display:none;">
+    <div class="card-title">User approval</div>
+    <p class="card-note">
+      Review signup requests. Only <strong>approved</strong> users can sign in.
+    </p>
+
+    <div class="tabs">
+      <div class="tab active" data-status="pending">Pending</div>
+      <div class="tab" data-status="approved">Approved</div>
+      <div class="tab" data-status="rejected">Rejected</div>
+    </div>
+
+    <div id="userList" class="list"></div>
+
+    <!-- Change admin password section -->
+    <div class="change-pass">
+      <div class="card-title" style="font-size:0.95rem;margin-bottom:4px;">Change admin password</div>
+      <p class="card-note">
+        Only someone who knows the current password (portal owner with access to <strong>yashatechsolutions153@gmail.com</strong>) should change this.
+      </p>
+      <div class="login-row">
+        <input id="currentAdminPass" type="password" placeholder="Current admin password">
+        <input id="newAdminUser" type="text" placeholder="New admin username (optional)">
+        <input id="newAdminPass" type="password" placeholder="New admin password">
+        <button class="btn" onclick="changeAdminPassword()">Update Admin Credentials</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  // ----- helpers -----
+  function getUsers(){
+    const raw = localStorage.getItem('yasha_users');
+    return raw ? JSON.parse(raw) : [];
+  }
+  function saveUsers(users){
+    localStorage.setItem('yasha_users', JSON.stringify(users));
+  }
+
+  const loginCard = document.getElementById('loginCard');
+  const adminCard = document.getElementById('adminCard');
+  const userList = document.getElementById('userList');
+
+  // initialize admin credentials once
+  (function initAdminDefaults(){
+    if (!localStorage.getItem('yasha_admin_user')) {
+      localStorage.setItem('yasha_admin_user', 'admin');
+    }
+    if (!localStorage.getItem('yasha_admin_pass')) {
+      localStorage.setItem('yasha_admin_pass', 'yasha123');
+    }
+  })();
+
+  function getAdminUser(){
+    return localStorage.getItem('yasha_admin_user') || 'admin';
+  }
+  function getAdminPass(){
+    return localStorage.getItem('yasha_admin_pass') || 'yasha123';
+  }
+
+  function adminLogin(){
+    const u = document.getElementById('adminUser').value.trim();
+    const p = document.getElementById('adminPass').value.trim();
+
+    const storedUser = getAdminUser();
+    const storedPass = getAdminPass();
+
+    if (u === storedUser && p === storedPass){
+      sessionStorage.setItem('yasha_admin_logged_in', '1');
+      loginCard.style.display = 'none';
+      adminCard.style.display = 'block';
+      renderUsers(currentFilter);
+    } else {
+      alert('Invalid admin credentials.');
+    }
+  }
+
+  function changeAdminPassword(){
+    const current = document.getElementById('currentAdminPass').value.trim();
+    const newUser = document.getElementById('newAdminUser').value.trim();
+    const newPass = document.getElementById('newAdminPass').value.trim();
+
+    if (!current || !newPass){
+      alert('Enter current password and new password.');
+      return;
+    }
+
+    const storedPass = getAdminPass();
+    if (current !== storedPass){
+      alert('Current password is incorrect.');
+      return;
+    }
+
+    if (newUser){
+      localStorage.setItem('yasha_admin_user', newUser);
+    }
+    localStorage.setItem('yasha_admin_pass', newPass);
+
+    document.getElementById('currentAdminPass').value = '';
+    document.getElementById('newAdminUser').value = '';
+    document.getElementById('newAdminPass').value = '';
+
+    alert('Admin username/password updated successfully on this browser.');
+  }
+
+  function logout(){
+    sessionStorage.removeItem('yasha_admin_logged_in');
+    window.location.href = 'index.html';
+  }
+
+  let currentFilter = 'pending';
+
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentFilter = tab.getAttribute('data-status');
+      renderUsers(currentFilter);
+    });
+  });
+
+  function renderUsers(filterStatus){
+    const users = getUsers();
+    userList.innerHTML = '';
+    const filtered = users.filter(u => (u.status || 'pending') === filterStatus);
+
+    if (!filtered.length){
+      userList.innerHTML = '<div class="muted">No users in this state.</div>';
+      return;
+    }
+
+    filtered.forEach(u => {
+      const div = document.createElement('div');
+      div.className = 'row';
+      div.innerHTML = `
+        <div class="row-header">
+          <div>
+            <div class="name">${u.name || 'No name'}</div>
+            <div class="muted">${u.email || ''} · ${u.phone || ''}</div>
+            <div class="muted">Role: <span class="badge-role">${u.role || 'student'}</span></div>
+            <div class="status-tag">Status: ${u.status || 'pending'} · ${(u.courseType || '')}</div>
+          </div>
+          <div>
+            ${filterStatus === 'pending' ? `
+              <button class="btn-small btn-approve" onclick="changeStatus('${u.email}','approved')">Approve</button>
+              <button class="btn-small btn-reject" onclick="changeStatus('${u.email}','rejected')">Reject</button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+      userList.appendChild(div);
+    });
+  }
+
+  function changeStatus(email,status){
+    const users = getUsers();
+    const idx = users.findIndex(u => u.email === email);
+    if (idx === -1) return;
+    users[idx].status = status;
+    saveUsers(users);
+    renderUsers(currentFilter);
+  }
+
+  // auto-login if already authenticated in this tab
+  (function init(){
+    if (sessionStorage.getItem('yasha_admin_logged_in') === '1'){
+      loginCard.style.display = 'none';
+      adminCard.style.display = 'block';
+      renderUsers(currentFilter);
+    }
+  })();
+</script>
+</body>
+</html>

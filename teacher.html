@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Teacher Dashboard – Yasha Tech Solutions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --primary: #00e5ff;
+      --primary-soft: rgba(0,229,255,0.25);
+      --accent: #00ff99;
+      --bg-dark: #020617;
+      --text-main: #f9fafb;
+      --muted: #9ca3af;
+      --shadow: 0 16px 40px rgba(0,0,0,0.8);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text-main);
+      min-height:100vh;
+      background:#000;
+      position:relative;
+      overflow-x:hidden;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:url("dashboard-bg.jpg") center/cover no-repeat;
+      z-index:-2;
+    }
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:radial-gradient(circle at center,rgba(0,0,0,0.4),rgba(0,0,0,0.9));
+      z-index:-1;
+    }
+    header{
+      padding:10px 6%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      backdrop-filter:blur(18px);
+      background:linear-gradient(90deg,rgba(0,0,0,0.7),rgba(0,0,0,0.4));
+      border-bottom:1px solid rgba(148,163,184,0.6);
+    }
+    .brand{display:flex;align-items:center;gap:10px;}
+    .brand-mark{
+      width:36px;height:36px;border-radius:12px;
+      background:radial-gradient(circle at 30% 20%,#ffffff,#a5f3fc);
+      color:#0369a1;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;box-shadow:0 0 0 3px rgba(56,189,248,0.7);
+    }
+    .brand-text{font-size:0.98rem;letter-spacing:0.08em;text-transform:uppercase;}
+    .top-right{
+      display:flex;align-items:center;gap:14px;font-size:0.86rem;
+    }
+    .badge{
+      padding:3px 9px;border-radius:999px;
+      border:1px solid rgba(148,163,184,0.7);
+      color:var(--muted);
+      font-size:0.74rem;text-transform:uppercase;letter-spacing:0.12em;
+    }
+    .btn-out{
+      border-radius:999px;padding:4px 12px;
+      border:1px solid rgba(248,250,252,0.9);
+      background:rgba(0,0,0,0.6);
+      color:#f9fafb;font-size:0.8rem;cursor:pointer;
+    }
+
+    main{padding:22px 6% 30px;}
+    .hello{margin-bottom:18px;font-size:1rem;}
+    .hello span{color:var(--primary);font-weight:600;}
+
+    .grid{
+      display:grid;
+      grid-template-columns:1.2fr 1.1fr;
+      gap:20px;
+      align-items:flex-start;
+    }
+    @media(max-width:950px){
+      .grid{grid-template-columns:1fr;}
+      main{padding:18px 4% 26px;}
+    }
+
+    .card{
+      background:linear-gradient(135deg,rgba(15,23,42,0.9),rgba(15,23,42,0.86));
+      border-radius:20px;
+      padding:16px 16px 18px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(148,163,184,0.4);
+    }
+    .card-title{font-size:1.02rem;margin-bottom:5px;}
+    .card-note{font-size:0.8rem;color:var(--muted);margin-bottom:10px;}
+
+    label{
+      display:block;
+      font-size:0.78rem;
+      margin-bottom:3px;
+      color:var(--muted);
+    }
+    input,select,textarea{
+      width:100%;
+      padding:7px 9px;
+      margin-bottom:8px;
+      border-radius:8px;
+      border:1px solid rgba(51,65,85,0.9);
+      background:rgba(15,23,42,0.95);
+      color:var(--text-main);
+      font-size:0.84rem;
+      font-family:inherit;
+    }
+    textarea{resize:vertical;}
+    input:focus,select:focus,textarea:focus{
+      outline:1px solid var(--primary);
+      border-color:var(--primary);
+      box-shadow:0 0 0 1px var(--primary-soft);
+    }
+
+    .btn{
+      border-radius:999px;
+      padding:7px 16px;
+      font-size:0.8rem;
+      cursor:pointer;
+      border:none;
+      background:linear-gradient(135deg,#06b6d4,#22c55e);
+      color:#020617;
+      font-weight:600;
+      letter-spacing:0.04em;
+      margin-top:4px;
+    }
+    .btn-small{
+      padding:4px 10px;
+      font-size:0.76rem;
+    }
+
+    .course-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-bottom:10px;
+    }
+    .course-pill{
+      padding:4px 9px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.7);
+      font-size:0.78rem;
+      cursor:pointer;
+      color:var(--muted);
+    }
+    .course-pill.active{
+      background:linear-gradient(135deg,#38bdf8,#22c55e);
+      border-color:transparent;
+      color:#020617;
+      font-weight:600;
+    }
+
+    .video-list,.question-list,.test-list,.marks-list{
+      max-height:260px;
+      overflow-y:auto;
+      padding-right:4px;
+      font-size:0.82rem;
+    }
+    .item-row{
+      border-radius:10px;
+      border:1px solid rgba(51,65,85,0.8);
+      padding:8px 9px;
+      margin-bottom:6px;
+      background:rgba(15,23,42,0.9);
+    }
+    .item-row h4{
+      font-size:0.84rem;
+      margin-bottom:2px;
+    }
+    .muted{color:var(--muted);font-size:0.78rem;}
+    .badge-soft{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      background:rgba(15,118,110,0.35);
+      font-size:0.7rem;
+      margin-left:4px;
+    }
+    .flex-between{
+      display:flex;
+      justify-content:space-between;
+      gap:6px;
+      align-items:flex-start;
+    }
+    .tag-course{
+      font-size:0.74rem;
+      color:var(--primary);
+    }
+    .question-text{margin:3px 0;}
+    .student-info{font-size:0.75rem;color:#9ca3af;}
+    .time-tag{font-size:0.75rem;color:#a5b4fc;}
+    .q-opts{margin-top:4px;}
+
+    /* small video preview */
+    .video-preview-wrapper{
+      margin-top:6px;
+      margin-bottom:10px;
+    }
+    .video-preview-wrapper video{
+      width:100%;
+      max-height:200px;
+      border-radius:10px;
+      border:1px solid rgba(51,65,85,0.9);
+      background:#000;
+    }
+    .hint{
+      font-size:0.75rem;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="brand-mark">Y</div>
+    <div class="brand-text">Yasha Tech Solutions · Teacher Dashboard</div>
+  </div>
+  <div class="top-right">
+    <span class="badge">TEACHER</span>
+    <span id="welcomeName">Welcome, Teacher</span>
+    <button class="btn-out" onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<main>
+  <div class="hello">
+    Hello <span id="helloName">Teacher</span>, manage your courses, videos, tests and student doubts.
+  </div>
+
+  <div class="grid">
+    <!-- LEFT: video & tests -->
+    <section class="card">
+      <div class="card-title">Course & video management</div>
+      <p class="card-note">Select a course, upload related videos and create tests for students.</p>
+
+      <label>Your courses</label>
+      <div id="coursePills" class="course-row"></div>
+
+      <label>Selected course</label>
+      <input id="currentCourse" type="text" readonly placeholder="No course selected">
+
+      <!-- Video upload area -->
+      <div style="margin-top:6px;margin-bottom:4px;font-size:0.8rem;color:var(--muted);">
+        You can pick a video file to preview, then upload it to your server/cloud and paste the hosted URL below.
+        Browsers alone cannot store 10 GB; use backend / cloud (S3, etc.) for large files.
+      </div>
+
+      <label for="videoFile">Choose video file (preview only)</label>
+      <input id="videoFile" type="file" accept="video/*">
+
+      <div class="video-preview-wrapper" id="videoPreviewWrapper" style="display:none;">
+        <div class="hint">Preview of selected file (local only, not uploaded yet):</div>
+        <video id="videoPreview" controls></video>
+      </div>
+
+      <label>Video title</label>
+      <input id="videoTitle" type="text" placeholder="e.g., Intro to EC2">
+
+      <label>Video description</label>
+      <textarea id="videoDesc" rows="2" placeholder="Short description of this lesson."></textarea>
+
+      <label>Video URL / path (after uploading)</label>
+      <input id="videoSrc" type="text" placeholder="https://... or videos/file.mp4">
+
+      <button class="btn" type="button" onclick="addVideo()">Add Video</button>
+
+      <div style="margin-top:12px;font-size:0.86rem;font-weight:500;">Videos for this course</div>
+      <div id="videoList" class="video-list"></div>
+
+      <hr style="border:none;border-top:1px solid rgba(51,65,85,0.9);margin:10px 0;">
+
+      <div class="card-title" style="margin-bottom:4px;">Create test questions</div>
+      <p class="card-note">These questions will appear on the student Tests page for the selected course.</p>
+
+      <label>Question</label>
+      <textarea id="testQuestion" rows="2" placeholder="e.g., What does EC2 stand for?"></textarea>
+
+      <label>Options (one per line, correct one first)</label>
+      <textarea id="testOptions" rows="3" placeholder="Elastic Compute Cloud&#10;Easy Cloud Compute&#10;Elastic Cloud Container&#10;None of these"></textarea>
+
+      <button class="btn" type="button" onclick="addTestQuestion()">Add Test Question</button>
+
+      <div style="margin-top:10px;font-size:0.86rem;font-weight:500;">Test questions for this course</div>
+      <div id="testList" class="test-list"></div>
+    </section>
+
+    <!-- RIGHT: student questions & marks -->
+    <section class="card">
+      <div class="card-title">Student questions</div>
+      <p class="card-note">Questions asked from the course page, grouped by latest first.</p>
+
+      <div id="questionList" class="question-list"></div>
+
+      <hr style="border:none;border-top:1px solid rgba(51,65,85,0.9);margin:10px 10px 10px 0;">
+
+      <div class="card-title" style="margin-bottom:4px;">Test results</div>
+      <p class="card-note">Overview of student scores for your tests.</p>
+
+      <div id="marksList" class="marks-list"></div>
+    </section>
+  </div>
+</main>
+
+<script>
+  // ===== helpers for storage =====
+  function getUsers(){const raw=localStorage.getItem('yasha_users');return raw?JSON.parse(raw):[];}
+  function getCurrentEmail(){return localStorage.getItem('yasha_teacher_user') || localStorage.getItem('yasha_current_user');}
+
+  function load(key, fallback){
+    const raw = localStorage.getItem(key);
+    if (!raw) return fallback;
+    try { return JSON.parse(raw); } catch { return fallback; }
+  }
+  function save(key, value){
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  // ===== auth: ensure logged-in teacher =====
+  const email = getCurrentEmail();
+  const users = getUsers();
+  const me = email ? users.find(u => u.email.toLowerCase() === email.toLowerCase()) : null;
+
+  if (!me){
+    alert('Teacher not logged in. Redirecting to login.');
+    window.location.href = 'index.html';
+  }
+  if (me && me.role !== 'teacher'){
+    alert('This page is only for teachers.');
+    window.location.href = 'userpage.html';
+  }
+
+  document.getElementById('welcomeName').textContent = 'Welcome, ' + (me.name || 'Teacher');
+  document.getElementById('helloName').textContent = me.name || 'Teacher';
+
+  // teacher courses (could be assigned in your DB; here we reuse generic list or me.courses)
+  const teacherCourses = (me.courses && me.courses.length)
+    ? me.courses.map(c => c.name)
+    : ['Cloud Computing','DevOps','Full‑Stack Development','Data Science','Machine Learning','Computer Hardware & Basics'];
+
+  // shared data
+  let videos = load('yasha_course_videos', []);           // {id, course, title, description, src}
+  let qaItems = load('yasha_course_questions', []);       // {id, course, videoId, studentName, studentPhone, studentEmail, question, timeText, createdAt}
+  let tests = load('yasha_tests', []);                    // {id, course, question, options, correctIndex}
+  let marks = load('yasha_test_results', []);             // {studentEmail, course, score, total, submittedAt}
+
+  let currentCourse = teacherCourses[0] || null;
+
+  const coursePillsEl = document.getElementById('coursePills');
+  const courseInputEl = document.getElementById('currentCourse');
+  const videoListEl = document.getElementById('videoList');
+  const testListEl = document.getElementById('testList');
+  const questionListEl = document.getElementById('questionList');
+  const marksListEl = document.getElementById('marksList');
+
+  const videoFileInput = document.getElementById('videoFile');
+  const videoPreviewWrapper = document.getElementById('videoPreviewWrapper');
+  const videoPreview = document.getElementById('videoPreview');
+  let currentVideoFileUrl = null;
+
+  // ===== render course pills =====
+  function renderCoursePills(){
+    coursePillsEl.innerHTML = '';
+    teacherCourses.forEach(name => {
+      const div = document.createElement('div');
+      div.className = 'course-pill' + (name === currentCourse ? ' active':'');
+      div.textContent = name;
+      div.addEventListener('click', () => selectCourse(name));
+      coursePillsEl.appendChild(div);
+    });
+    courseInputEl.value = currentCourse || '';
+  }
+
+  function selectCourse(name){
+    currentCourse = name;
+    renderCoursePills();
+    renderVideos();
+    renderTests();
+    renderQuestions();
+    renderMarks();
+  }
+
+  // ===== video file preview handling =====
+  if (videoFileInput){
+    videoFileInput.addEventListener('change', function(e){
+      const file = e.target.files[0];
+      if (!file){
+        videoPreviewWrapper.style.display = 'none';
+        if (currentVideoFileUrl){
+          URL.revokeObjectURL(currentVideoFileUrl);
+          currentVideoFileUrl = null;
+        }
+        return;
+      }
+
+      // NOTE: This only previews locally; it does not upload.
+      if (currentVideoFileUrl){
+        URL.revokeObjectURL(currentVideoFileUrl);
+      }
+      currentVideoFileUrl = URL.createObjectURL(file);
+      videoPreview.src = currentVideoFileUrl;
+      videoPreviewWrapper.style.display = 'block';
+    });
+  }
+
+  // ===== video management =====
+  function addVideo(){
+    if (!currentCourse){alert('Select a course first.');return;}
+    const title = document.getElementById('videoTitle').value.trim();
+    const desc  = document.getElementById('videoDesc').value.trim();
+    const src   = document.getElementById('videoSrc').value.trim();
+    if (!title || !src){
+      alert('Title and hosted video URL/path are required.');
+      return;
+    }
+
+    const id = 'v_' + Date.now();
+    videos.push({id, course:currentCourse, title, description:desc, src});
+    save('yasha_course_videos', videos);
+
+    document.getElementById('videoTitle').value='';
+    document.getElementById('videoDesc').value='';
+    document.getElementById('videoSrc').value='';
+    renderVideos();
+    alert('Video reference added for ' + currentCourse + '. Make sure the URL is accessible to students.');
+  }
+
+  function renderVideos(){
+    videoListEl.innerHTML = '';
+    const list = videos.filter(v => v.course === currentCourse);
+    if (!list.length){
+      videoListEl.innerHTML = '<div class="muted">No videos yet for this course.</div>';
+      return;
+    }
+    list.forEach(v => {
+      const row = document.createElement('div');
+      row.className = 'item-row';
+      row.innerHTML = `
+        <h4>${v.title}</h4>
+        <div class="muted">${v.description || ''}</div>
+        <div class="muted">URL: ${v.src}</div>
+      `;
+      videoListEl.appendChild(row);
+    });
+  }
+
+  // ===== test management =====
+  function addTestQuestion(){
+    if (!currentCourse){alert('Select a course first.');return;}
+    const qText = document.getElementById('testQuestion').value.trim();
+    const optsRaw = document.getElementById('testOptions').value.trim();
+    if (!qText || !optsRaw){alert('Question and options are required.');return;}
+
+    const options = optsRaw.split('\n').map(o=>o.trim()).filter(Boolean);
+    if (options.length < 2){alert('Give at least 2 options.');return;}
+
+    const test = {
+      id: 't_' + Date.now(),
+      course: currentCourse,
+      question: qText,
+      options,
+      correctIndex: 0   // first line is correct; student side will use this
+    };
+    tests.push(test);
+    save('yasha_tests', tests);
+
+    document.getElementById('testQuestion').value='';
+    document.getElementById('testOptions').value='';
+    renderTests();
+    alert('Test question added for ' + currentCourse);
+  }
+
+  function renderTests(){
+    testListEl.innerHTML = '';
+    const list = tests.filter(t => t.course === currentCourse);
+    if (!list.length){
+      testListEl.innerHTML = '<div class="muted">No test questions for this course yet.</div>';
+      return;
+    }
+    list.forEach((t, idx) => {
+      const div = document.createElement('div');
+      div.className = 'item-row';
+      div.innerHTML = `
+        <div><strong>Q${idx+1}.</strong> ${t.question}</div>
+        <div class="q-opts muted">
+          ${t.options.map((o,i)=>`${i===0?'<strong>(Correct)</strong> ':''}${o}`).join('<br>')}
+        </div>
+      `;
+      testListEl.appendChild(div);
+    });
+  }
+
+  // ===== student questions (Q&A from course page) =====
+  function renderQuestions(){
+    questionListEl.innerHTML = '';
+    const list = qaItems
+      .filter(q => !currentCourse || q.course === currentCourse)
+      .sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt));
+
+    if (!list.length){
+      questionListEl.innerHTML = '<div class="muted">No questions have been asked yet.</div>';
+      return;
+    }
+
+    list.forEach(q => {
+      const div = document.createElement('div');
+      div.className='item-row';
+      div.innerHTML = `
+        <div class="flex-between">
+          <h4>${q.videoTitle || 'Lesson'}</h4>
+          <span class="tag-course">${q.course || ''}</span>
+        </div>
+        <div class="question-text">${q.question}</div>
+        <div class="student-info">
+          ${q.studentName || 'Unknown'} · ${q.studentPhone || ''} · ${q.studentEmail || ''}
+        </div>
+        <div class="time-tag">Asked at video time ${q.timeText || '00:00'} · ${q.createdAt || ''}</div>
+      `;
+      questionListEl.appendChild(div);
+    });
+  }
+
+  // ===== marks / test results =====
+  function renderMarks(){
+    marksListEl.innerHTML = '';
+    const list = marks
+      .filter(m => !currentCourse || m.course === currentCourse)
+      .sort((a,b)=> new Date(b.submittedAt) - new Date(a.submittedAt));
+    if (!list.length){
+      marksListEl.innerHTML = '<div class="muted">No test submissions yet.</div>';
+      return;
+    }
+    list.forEach(m => {
+      const div = document.createElement('div');
+      div.className='item-row';
+      div.innerHTML = `
+        <div class="flex-between">
+          <h4>${m.studentName || m.studentEmail}</h4>
+          <span class="badge-soft">${m.score}/${m.total}</span>
+        </div>
+        <div class="student-info">${m.studentEmail} · ${m.course}</div>
+        <div class="muted">Submitted: ${m.submittedAt}</div>
+      `;
+      marksListEl.appendChild(div);
+    });
+  }
+
+  function logout(){
+    localStorage.removeItem('yasha_teacher_user');
+    window.location.href = 'index.html';
+  }
+
+  // init
+  renderCoursePills();
+  renderVideos();
+  renderTests();
+  renderQuestions();
+  renderMarks();
+</script>
+</body>
+</html>
