@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yasha Tech Solutions - Internship Portal</title>
+  <title>Yasha Tech Solutions - Internships & IT Services</title>
 
   <meta name="description"
-        content="Yasha Tech Solutions offers industry-oriented internships in Cloud Computing, DevOps, Full-Stack Development, Data Science using Python, Machine Learning, and Computer Hardware & Basics for BCA, MCA and Engineering students.">
+        content="Yasha Tech Solutions offers internships for students and complete IT services for companies, including custom web application development, frontend and backend, and AWS cloud hosting.">
 
   <style>
     :root {
@@ -138,11 +138,13 @@
       gap: 28px;
       align-items: center;
     }
-    .about-card {
+    .about-card,
+    .services-card {
       background: white; border-radius: var(--card-radius);
       padding: 10px; box-shadow: var(--shadow-soft);
     }
-    .about-card img { border-radius: 10px; }
+    .about-card img,
+    .services-card img { border-radius: 10px; }
 
     /* INTERNSHIP */
     .card-grid {
@@ -170,8 +172,8 @@
     .eligibility-box ul { padding-left: 18px; margin-top: 6px; }
     .eligibility-box li { margin-bottom: 4px; }
 
-    /* CONTACT */
-    .contact-list { list-style: none; margin-top: 10px; }
+    /* CONTACT & LISTS */
+    .contact-list { list-style: none; margin-top: 10px; padding-left: 0; }
     .contact-list li { margin-bottom: 6px; font-size: 0.95rem; }
     .contact-list a { color: var(--primary-blue); font-weight: 600; }
     .contact-form {
@@ -273,7 +275,8 @@
       <nav class="main-nav">
         <a href="#home">Home</a>
         <a href="#about">About</a>
-        <a href="#internship">Internship</a>
+        <a href="#services">IT Services</a>
+        <a href="#internship">Internships</a>
         <a href="#contact">Contact</a>
       </nav>
 
@@ -292,25 +295,25 @@
     <section class="hero-section">
       <div class="container hero-content">
         <div class="hero-text">
-          <h1>Internship Portal for Future Tech Professionals</h1>
+          <h1>IT Services for Companies & Internships for Students</h1>
           <p>
-            Build impactful projects with industry‑oriented internships for BCA, MCA
-            and Engineering students in CSE, IT, Data Science and AI &amp; ML.
+            For students, we provide structured technical internships with real‑time projects.
+            For companies and clients, we deliver complete web development, project execution and AWS cloud hosting.
           </p>
           <p class="hero-sub">
-            Cloud Computing • DevOps • Full‑Stack Development • Data Science using Python • Machine Learning • Computer Hardware &amp; Basics
+            Cloud Computing • DevOps • Full‑Stack Development • Data Science using Python • Machine Learning • Computer Hardware & Basics
           </p>
           <div class="hero-actions">
-            <button class="btn solid" id="heroSignup">Get Started</button>
-            <a href="#internship" class="btn outline">View Internship Programs</a>
+            <button class="btn solid" id="heroSignup">Get Started (Students)</button>
+            <a href="#services" class="btn outline">View IT Services (Companies)</a>
           </div>
           <p class="msme-note">
-            MSME Registered • Internships structured to align with VTU and Karnataka university internship guidelines • Internship Certificate on Successful Completion
+            MSME Registered • Work aligned with VTU and Karnataka university guidelines • Internship & Project Completion Certificates
           </p>
         </div>
 
         <div class="hero-card">
-          <img src="PAMPLATES.png" alt="Yasha Tech Solutions Internship Program Pamphlet">
+          <img src="PAMPLATES.png" alt="Yasha Tech Solutions pamphlet">
         </div>
       </div>
     </section>
@@ -321,33 +324,60 @@
         <div>
           <h2>About Yasha Tech Solutions</h2>
           <p>
-            Yasha Tech Solutions is an MSME‑registered training and internship company
-            providing practical IT skills through real‑time projects and mentoring by working professionals.
+            Yasha Tech Solutions is an MSME‑registered IT training and development company
+            based in Karnataka, focusing on internships, project work and cloud‑based solutions.
           </p>
           <p>
-            Students gain hands‑on experience, professional networking, skill development
-            and resume‑ready project exposure that helps them stand out in high‑tech and MNC hiring.
+            We support students with guided learning and support businesses like a dedicated tech partner,
+            from requirement discussion to live deployment.
           </p>
         </div>
         <div class="about-card">
-          <img src="CERTIFICATE.png" alt="Sample Certificate of Internship from Yasha Tech Solutions">
+          <img src="CERTIFICATE.png" alt="Sample certificate from Yasha Tech Solutions">
         </div>
       </div>
     </section>
 
-    <!-- INTERNSHIP -->
+    <!-- SERVICES: FOR COMPANIES & CLIENTS -->
+    <section id="services" class="section-light">
+      <div class="container two-column">
+        <div>
+          <h2>Project Development & Cloud Services (For Companies & Clients)</h2>
+          <p class="section-intro">
+            We work with startups, small businesses and individual clients to build and host complete software solutions,
+            similar to how other professional tech companies operate.
+          </p>
+          <ul class="contact-list">
+            <li><strong>Custom Web Applications:</strong> Business portals, dashboards, admin panels and internal tools.</li>
+            <li><strong>Frontend & UI Development:</strong> Responsive websites and landing pages for your brand.</li>
+            <li><strong>Backend & APIs:</strong> Secure REST APIs, database design and integrations using Node.js.</li>
+            <li><strong>AWS Cloud Setup & Hosting:</strong> EC2 hosting, domain mapping, SSL certificates and monitoring.</li>
+            <li><strong>End‑to‑End Project Delivery:</strong> From requirement gathering to deployment and ongoing support.</li>
+          </ul>
+        </div>
+        <div class="services-card">
+          <!-- Use your real image filenames or change src paths -->
+          <img src="web-development.png" alt="Web development illustration">
+          <br>
+          <img src="aws-hosting.png" alt="AWS cloud hosting illustration">
+          <br>
+          <img src="project-development.png" alt="Project development workflow illustration">
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERNSHIP: FOR STUDENTS -->
     <section id="internship" class="section-dark">
       <div class="container">
-        <h2>Internship Programs</h2>
+        <h2>Internship Programs (For Students)</h2>
         <p class="section-intro">
-          Choose your domain and learn from scratch with project‑based guidance, dedicated mentoring
-          and completion certificates.
+          Designed for BCA, MCA and Engineering students to gain hands‑on experience with real‑time projects and mentoring.
         </p>
 
         <div class="card-grid">
           <article class="course-card">
             <h3>Cloud Computing</h3>
-            <p>Understand cloud concepts, services and deployment models with guided lab practice.</p>
+            <p>Understand cloud concepts, services and deployment models with guided AWS lab practice.</p>
           </article>
           <article class="course-card">
             <h3>DevOps</h3>
@@ -388,7 +418,7 @@
         <div>
           <h2>Contact &amp; Registration</h2>
           <p>
-            Have questions about the internship or need help with registration? Reach out anytime.
+            For internship details, project development or AWS cloud services, reach out anytime.
           </p>
           <ul class="contact-list">
             <li><strong>WhatsApp:</strong> <a href="https://wa.me/919480401503" target="_blank">+91‑9480401503</a></li>
@@ -439,7 +469,6 @@
         <label for="su-phone">Phone</label>
         <input id="su-phone" type="tel" placeholder="+91-9480401503" required>
 
-        <!-- visible only for students -->
         <div id="studentCourseWrapper">
           <label for="su-course">Course (for students)</label>
           <select id="su-course">
@@ -491,10 +520,8 @@
   </div>
 
   <script>
-    // All API calls go to same origin (EC2 IP:4000), so base can be empty string.
     const API_BASE = '';
 
-    // ---------- MODAL OPEN/CLOSE ----------
     const signupModal = document.getElementById('signupModal');
     const signinModal = document.getElementById('signinModal');
 
@@ -518,7 +545,6 @@
       if (e.target === signinModal) signinModal.style.display = 'none';
     });
 
-    // toggle student course field when signup role changes
     const studentCourseWrapper = document.getElementById('studentCourseWrapper');
     document.querySelectorAll('input[name="su-role"]').forEach(r => {
       r.addEventListener('change', () => {
@@ -535,7 +561,6 @@
       return r ? r.value : 'student';
     }
 
-    // ---------- SIGN UP (API) ----------
     async function handleSignup(event) {
       if (event) event.preventDefault();
 
@@ -584,7 +609,6 @@
       }
     }
 
-    // ---------- SIGN IN (API) ----------
     async function handleSignin(event) {
       if (event) event.preventDefault();
 
@@ -611,7 +635,6 @@
           return;
         }
 
-        // Save minimal user info for other pages
         localStorage.setItem('yasha_current_user', JSON.stringify(data.user));
 
         if (data.user.role === 'teacher') {
@@ -623,10 +646,8 @@
           signinModal.style.display = 'none';
           window.location.href = 'userpage.html';
         } else if (data.user.role === 'admin') {
-          // If in future you support admin login via API
           window.location.href = 'admin.html';
         } else {
-          // fallback
           window.location.href = 'userpage.html';
         }
       } catch (err) {
@@ -635,11 +656,9 @@
       }
     }
 
-    // Attach handlers to buttons
     document.getElementById('signupBtn').addEventListener('click', handleSignup);
     document.getElementById('signinBtn').addEventListener('click', handleSignin);
 
-    // ---------- Admin default credentials (local, for admin.html script) ----------
     (function initAdminCredentials(){
       if (!localStorage.getItem('yasha_admin_user')) {
         localStorage.setItem('yasha_admin_user', 'admin');
