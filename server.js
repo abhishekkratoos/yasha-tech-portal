@@ -12,6 +12,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Serve all static files (index.html, CSS, JS, images, other HTML) from project root
+app.use(express.static(path.join(__dirname)));
+
+
 // ----------------- JSON storage helpers -----------------
 const DATA_DIR = path.join(__dirname, 'data');
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
@@ -40,6 +44,7 @@ function saveJson(fileName, value) {
 // tests.json          -> {id, course, question, options, correctIndex}
 // questions.json      -> student doubts from course page
 // testResults.json    -> marks / test submissions
+
 
 // ----------------- uploads (videos) -----------------
 const UPLOAD_ROOT = path.join(__dirname, 'uploads');
@@ -75,16 +80,33 @@ const upload = multer({
   limits: {
     fileSize: 1 * 1024 * 1024 * 1024 // 1 GB – increase only if infra supports it
   }
-}); // [web:235][web:228]
-
-// ----------------- health -----------------
-app.get('/', (req, res) => {
-  res.json({
-    status: 'ok',
-    message: 'Yasha Tech Solutions API (JSON-file storage)',
-    uploadsBase: '/uploads/videos'
-  });
 });
+
+
+// ----------------- HTML routes (for AWS) -----------------
+
+// Root -> index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Explicit routes for other pages (in case static doesn’t catch them)
+app.get('/userpage.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'userpage.html'));
+});
+
+app.get('/teacher.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'teacher.html'));
+});
+
+app.get('/admin.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+app.get('/profile.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'profile.html'));
+});
+
 
 // ===================================================================
 // AUTH & USERS (index.html / admin.html / basic login)
@@ -159,13 +181,13 @@ app.post('/api/auth/login', (req, res) => {
   });
 });
 
-// Admin: list all users (used by admin.html grid, once you switch to API)
+// Admin: list all users
 app.get('/api/admin/users', (req, res) => {
   const users = loadJson('users.json', []);
   res.json(users);
 });
 
-// Admin: update user status (approve / reject)
+// Admin: update user status
 app.patch('/api/admin/users/:email/status', (req, res) => {
   const { email } = req.params;
   const { status } = req.body || {};
@@ -182,18 +204,17 @@ app.patch('/api/admin/users/:email/status', (req, res) => {
   res.json({ message: 'Status updated', user: users[idx] });
 });
 
+
 // ===================================================================
 // STUDENT PROFILE (profile.html) – yasha_profile_<email>
 // ===================================================================
 
-// Get profile
 app.get('/api/students/:email/profile', (req, res) => {
   const key = req.params.email.toLowerCase();
   const profiles = loadJson('profiles.json', {}); // { emailLower: profileObj }
   res.json(profiles[key] || null);
 });
 
-// Save / update profile – body == collectFormData() object
 app.put('/api/students/:email/profile', (req, res) => {
   const email = req.params.email;
   const key = email.toLowerCase();
@@ -210,11 +231,11 @@ app.put('/api/students/:email/profile', (req, res) => {
   res.json({ message: 'Profile saved', profile: profiles[key] });
 });
 
+
 // ===================================================================
 // STUDENT DASHBOARD: courses & project log (userpage.html)
 // ===================================================================
 
-// Get dashboard data
 app.get('/api/students/:email/dashboard', (req, res) => {
   const email = req.params.email.toLowerCase();
   const users = loadJson('users.json', []);
@@ -227,7 +248,6 @@ app.get('/api/students/:email/dashboard', (req, res) => {
   });
 });
 
-// Add course (same shape as addCourse() on userpage)
 app.post('/api/students/:email/courses', (req, res) => {
   const email = req.params.email.toLowerCase();
   const { name } = req.body || {};
@@ -249,7 +269,6 @@ app.post('/api/students/:email/courses', (req, res) => {
   res.status(201).json({ message: 'Course added', courses: me.courses });
 });
 
-// Update course progress (like updateCourseProgress())
 app.patch('/api/students/:email/courses', (req, res) => {
   const email = req.params.email.toLowerCase();
   const { name, progress } = req.body || {};
@@ -271,7 +290,6 @@ app.patch('/api/students/:email/courses', (req, res) => {
   res.json({ message: 'Progress updated', course: me.courses[cIdx] });
 });
 
-// Add project update (like addProjectUpdate())
 app.post('/api/students/:email/project-log', (req, res) => {
   const email = req.params.email.toLowerCase();
   const { text } = req.body || {};
@@ -291,11 +309,11 @@ app.post('/api/students/:email/project-log', (req, res) => {
   res.status(201).json({ message: 'Project update added', log: me.projectLog });
 });
 
+
 // ===================================================================
 // COURSE VIDEOS (teacher.html + course.html)
 // ===================================================================
 
-// Get all videos or filter by course
 app.get('/api/videos', (req, res) => {
   const { course } = req.query;
   const videos = loadJson('courseVideos.json', []);
@@ -305,7 +323,6 @@ app.get('/api/videos', (req, res) => {
   res.json(videos);
 });
 
-// Add video (teacher adds a hosted URL; maps to yasha_course_videos)
 app.post('/api/videos', (req, res) => {
   const { course, title, description, src, duration } = req.body || {};
   if (!course || !title || !src) {
@@ -321,10 +338,6 @@ app.post('/api/videos', (req, res) => {
   res.status(201).json({ message: 'Video added', video });
 });
 
-// Upload a large video file (teacher chooses file; server returns URL)
-// Teacher UI currently only previews local file; to integrate:
-//  - POST /api/upload/video with form-data field name="video"
-//  - Use returned videoUrl as src when calling /api/videos
 app.post('/api/upload/video', upload.single('video'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No video file uploaded' });
@@ -339,11 +352,11 @@ app.post('/api/upload/video', upload.single('video'), (req, res) => {
   });
 });
 
+
 // ===================================================================
 // TESTS & RESULTS (teacher.html tests section + future student tests)
 // ===================================================================
 
-// Get tests (optionally by course)
 app.get('/api/tests', (req, res) => {
   const { course } = req.query;
   const tests = loadJson('tests.json', []);
@@ -351,7 +364,6 @@ app.get('/api/tests', (req, res) => {
   res.json(tests);
 });
 
-// Add test question (same as addTestQuestion() in teacher.html)
 app.post('/api/tests', (req, res) => {
   const { course, question, options } = req.body || {};
   if (!course || !question || !options || !Array.isArray(options) || options.length < 2) {
@@ -364,7 +376,7 @@ app.post('/api/tests', (req, res) => {
     course,
     question,
     options,
-    correctIndex: 0 // matches "correct option is first line" logic
+    correctIndex: 0 // correct option is first line
   };
   tests.push(test);
   saveJson('tests.json', tests);
@@ -372,7 +384,6 @@ app.post('/api/tests', (req, res) => {
   res.status(201).json({ message: 'Test question added', test });
 });
 
-// Submit test result (for student tests page you build later)
 app.post('/api/tests/submit', (req, res) => {
   const { studentEmail, studentName, course, score, total } = req.body || {};
   if (!studentEmail || !course || typeof score === 'undefined' || typeof total === 'undefined') {
@@ -394,7 +405,6 @@ app.post('/api/tests/submit', (req, res) => {
   res.status(201).json({ message: 'Result recorded', result: entry });
 });
 
-// Get test results (teacher marks list, filtered by course if needed)
 app.get('/api/tests/results', (req, res) => {
   const { course } = req.query;
   const results = loadJson('testResults.json', []);
@@ -402,13 +412,11 @@ app.get('/api/tests/results', (req, res) => {
   res.json(results);
 });
 
+
 // ===================================================================
 // STUDENT Q&A (course.html asks; teacher.html sees list)
 // ===================================================================
 
-// Student asks a question from course page
-// Body should contain: course, videoId, videoTitle, studentName, studentPhone,
-// studentEmail, question, timeText
 app.post('/api/questions', (req, res) => {
   const {
     course,
@@ -444,16 +452,15 @@ app.post('/api/questions', (req, res) => {
   res.status(201).json({ message: 'Question recorded', question: item });
 });
 
-// Teacher fetches questions (optionally by course)
 app.get('/api/questions', (req, res) => {
   const { course } = req.query;
   const questions = loadJson('questions.json', []);
   let list = questions;
   if (course) list = list.filter(q => q.course === course);
-  // sort newest first like teacher.html
-  list = list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  list = list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // newest first
   res.json(list);
 });
+
 
 // ===================================================================
 // START SERVER
@@ -461,5 +468,5 @@ app.get('/api/questions', (req, res) => {
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-  console.log(`Yasha Tech API running on http://localhost:${PORT}`);
+  console.log(`Yasha Tech API running on http://13.60.180.98:${PORT}`);
 });
