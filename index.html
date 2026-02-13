@@ -6,7 +6,7 @@
   <title>Yasha Tech Solutions - Internship Portal</title>
 
   <meta name="description"
-        content="Yasha Tech Solutions offers industry-oriented internships in Cloud Computing, DevOps, Full-Stack Development, Data Science and AI & ML for BCA, MCA and Engineering students.">
+        content="Yasha Tech Solutions offers industry-oriented internships in Cloud Computing, DevOps, Full-Stack Development, Data Science using Python, Machine Learning, and Computer Hardware & Basics for BCA, MCA and Engineering students.">
 
   <style>
     :root {
@@ -298,7 +298,7 @@
             and Engineering students in CSE, IT, Data Science and AI &amp; ML.
           </p>
           <p class="hero-sub">
-            Cloud Computing • DevOps • Full‑Stack Development • Data Science • Machine Learning • Computer Hardware &amp; Basics
+            Cloud Computing • DevOps • Full‑Stack Development • Data Science using Python • Machine Learning • Computer Hardware &amp; Basics
           </p>
           <div class="hero-actions">
             <button class="btn solid" id="heroSignup">Get Started</button>
@@ -358,12 +358,12 @@
             <p>Build responsive web apps from frontend UI to backend APIs and databases.</p>
           </article>
           <article class="course-card">
-            <h3>Data Science</h3>
-            <p>Work on data cleaning, analysis and visualization with real‑world datasets.</p>
+            <h3>Data Science using Python</h3>
+            <p>Work on data cleaning, analysis and visualization using Python and real‑world datasets.</p>
           </article>
           <article class="course-card">
             <h3>Machine Learning</h3>
-            <p>Implement ML models for prediction, classification and recommendation problems.</p>
+            <p>Implement machine learning models for prediction and classification with Python.</p>
           </article>
           <article class="course-card">
             <h3>Computer Hardware &amp; Basics</h3>
@@ -455,7 +455,7 @@
 
         <label for="su-password">Password</label>
         <input id="su-password" type="password" placeholder="Create a password" required>
-        <button class="btn solid" onclick="handleSignup()">Sign Up</button>
+        <button class="btn solid" id="signupBtn">Sign Up</button>
         <p class="modal-note">
           After admin approval, students can access the student dashboard and teachers the teacher dashboard.
         </p>
@@ -482,7 +482,7 @@
 
         <label for="si-password">Password</label>
         <input id="si-password" type="password" placeholder="Enter your password" required>
-        <button class="btn solid" onclick="handleSignin()">Sign In</button>
+        <button class="btn solid" id="signinBtn">Sign In</button>
         <p class="modal-note">
           Student login goes to <code>userpage.html</code>, teacher login goes to <code>teacher.html</code> once approved by admin.
         </p>
@@ -491,6 +491,9 @@
   </div>
 
   <script>
+    // All API calls go to same origin (EC2 IP:4000), so base can be empty string.
+    const API_BASE = '';
+
     // ---------- MODAL OPEN/CLOSE ----------
     const signupModal = document.getElementById('signupModal');
     const signinModal = document.getElementById('signinModal');
@@ -523,15 +526,6 @@
       });
     });
 
-    function getUsers() {
-      const raw = localStorage.getItem('yasha_users');
-      return raw ? JSON.parse(raw) : [];
-    }
-
-    function saveUsers(users) {
-      localStorage.setItem('yasha_users', JSON.stringify(users));
-    }
-
     function getSelectedSignupRole() {
       const r = document.querySelector('input[name="su-role"]:checked');
       return r ? r.value : 'student';
@@ -541,14 +535,16 @@
       return r ? r.value : 'student';
     }
 
-    // ---------- SIGN UP ----------
-    function handleSignup() {
-      const role = getSelectedSignupRole();
-      const name = document.getElementById('su-name').value.trim();
-      const email = document.getElementById('su-email').value.trim();
-      const phone = document.getElementById('su-phone').value.trim();
+    // ---------- SIGN UP (API) ----------
+    async function handleSignup(event) {
+      if (event) event.preventDefault();
+
+      const role       = getSelectedSignupRole();
+      const name       = document.getElementById('su-name').value.trim();
+      const email      = document.getElementById('su-email').value.trim();
+      const phone      = document.getElementById('su-phone').value.trim();
       const courseType = document.getElementById('su-course').value;
-      const password = document.getElementById('su-password').value;
+      const password   = document.getElementById('su-password').value;
 
       if (!name || !email || !phone || !password) {
         alert('Please fill all required fields.');
@@ -559,35 +555,41 @@
         return;
       }
 
-      const users = getUsers();
-      const exists = users.find(u => u.email.toLowerCase() === email.toLowerCase());
-      if (exists) {
-        alert('This email is already registered.');
-        return;
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/signup`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            email,
+            phone,
+            password,
+            role,
+            courseType: role === 'student' ? courseType : null
+          })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.message || 'Signup failed.');
+          return;
+        }
+
+        alert('Signup successful! Your account is pending admin approval.');
+        signupModal.style.display = 'none';
+      } catch (err) {
+        console.error(err);
+        alert('Network error during signup. Please try again.');
       }
-
-      const newUser = {
-        name,
-        email,
-        phone,
-        password,
-        role,                      // "student" or "teacher"
-        courseType: role === 'student' ? courseType : null,
-        status: 'pending',         // needs admin approval
-        createdAt: new Date().toISOString()
-      };
-
-      users.push(newUser);
-      saveUsers(users);
-
-      alert('Signup successful! Your account is pending admin approval. You will be able to login after admin accepts your request.');
-      signupModal.style.display = 'none';
     }
 
-    // ---------- SIGN IN ----------
-    function handleSignin() {
-      const role = getSelectedSigninRole();
-      const email = document.getElementById('si-email').value.trim();
+    // ---------- SIGN IN (API) ----------
+    async function handleSignin(event) {
+      if (event) event.preventDefault();
+
+      const role     = getSelectedSigninRole();
+      const email    = document.getElementById('si-email').value.trim();
       const password = document.getElementById('si-password').value.trim();
 
       if (!email || !password) {
@@ -595,44 +597,50 @@
         return;
       }
 
-      const users = getUsers();
-      const user = users.find(
-        u =>
-          u.email.toLowerCase() === email.toLowerCase() &&
-          u.password === password &&
-          (u.role || 'student') === role
-      );
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, role })
+        });
 
-      if (!user) {
-        alert('Invalid credentials for ' + role + ' account.');
-        return;
-      }
+        const data = await res.json();
 
-      if (user.status === 'pending') {
-        alert('Your account is waiting for admin approval. Please try again later.');
-        return;
-      }
-      if (user.status === 'rejected') {
-        alert('Your registration request was rejected. Please contact admin at yashatechsolutions153@gmail.com.');
-        return;
-      }
+        if (!res.ok) {
+          alert(data.message || 'Login failed.');
+          return;
+        }
 
-      if (role === 'student') {
-        localStorage.setItem('yasha_current_user', email);
-        alert('Student login successful!');
-        signinModal.style.display = 'none';
-        window.location.href = 'userpage.html';
-      } else {
-        localStorage.setItem('yasha_teacher_user', email);
-        alert('Teacher login successful!');
-        signinModal.style.display = 'none';
-        window.location.href = 'teacher.html';
+        // Save minimal user info for other pages
+        localStorage.setItem('yasha_current_user', JSON.stringify(data.user));
+
+        if (data.user.role === 'teacher') {
+          alert('Teacher login successful!');
+          signinModal.style.display = 'none';
+          window.location.href = 'teacher.html';
+        } else if (data.user.role === 'student') {
+          alert('Student login successful!');
+          signinModal.style.display = 'none';
+          window.location.href = 'userpage.html';
+        } else if (data.user.role === 'admin') {
+          // If in future you support admin login via API
+          window.location.href = 'admin.html';
+        } else {
+          // fallback
+          window.location.href = 'userpage.html';
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Network error during login. Please try again.');
       }
     }
 
-    // ---------- Admin default credentials (stored in localStorage) ----------
+    // Attach handlers to buttons
+    document.getElementById('signupBtn').addEventListener('click', handleSignup);
+    document.getElementById('signinBtn').addEventListener('click', handleSignin);
+
+    // ---------- Admin default credentials (local, for admin.html script) ----------
     (function initAdminCredentials(){
-      // admin user/pass can be edited from admin.html by owner of gmail yashatechsolutions153@gmail.com
       if (!localStorage.getItem('yasha_admin_user')) {
         localStorage.setItem('yasha_admin_user', 'admin');
       }
